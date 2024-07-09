@@ -8,6 +8,9 @@
 		thickness: string
 		rate: string
 	}
+
+	const PAPER_FIXED = 1550000
+
 	let paperCount: Paper[] = []
 	let finalPrice: number = 0
 
@@ -29,7 +32,6 @@
 	}
 
 	const calculatePaperCost = () => {
-		console.log(paperCount)
 		if (!paperCount.length) return
 
 		finalPrice = 0
@@ -37,18 +39,15 @@
 		paperCount.forEach((paper) => {
 			const paperSize =
 				parseFloat(paper.height) * parseFloat(paper.width) * parseFloat(paper.thickness)
-			const result = paperSize / 1550000
+			const result = paperSize / PAPER_FIXED
 			finalPrice += result * parseFloat(paper.rate)
 		})
-
-		console.log(finalPrice)
 	}
 
 	const clearAll = () => {
 		paperCount = []
 		finalPrice = 0
 	}
-	$: console.log({ paperCount })
 </script>
 
 <svelte:head>
@@ -90,7 +89,7 @@
 				{finalPrice}
 			{/if}
 		</div>
-		<div class="flex flex-row justify-between w-full">
+		<div class="flex flex-row justify-between w-full max-w-3xl">
 			<button
 				class="border border-slate-300 rounded-md text-sm px-3 py-1 w-fit"
 				on:click={addPaper}
