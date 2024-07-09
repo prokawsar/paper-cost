@@ -72,15 +72,30 @@
 					</button>
 				</div>
 				<div class="grid grid-cols-2 w-full gap-x-2 gap-y-2">
-					<input class="input-field" type="number" placeholder="height" bind:value={field.height} />
-					<input class="input-field" type="number" placeholder="width" bind:value={field.width} />
 					<input
-						class="input-field"
+						class="input-field focus:outline focus:outline-gray-600"
+						type="number"
+						placeholder="height"
+						bind:value={field.height}
+					/>
+					<input
+						class="input-field focus:outline focus:outline-gray-600"
+						type="number"
+						placeholder="width"
+						bind:value={field.width}
+					/>
+					<input
+						class="input-field focus:outline focus:outline-gray-600"
 						type="number"
 						placeholder="thickness"
 						bind:value={field.thickness}
 					/>
-					<input class="input-field" type="number" placeholder="rate" bind:value={field.rate} />
+					<input
+						class="input-field focus:outline focus:outline-gray-600"
+						type="number"
+						placeholder="rate"
+						bind:value={field.rate}
+					/>
 				</div>
 			</div>
 		{/each}
@@ -118,6 +133,6 @@
 
 <style lang="postcss">
 	.input-field {
-		@apply border border-gray-200 px-3 py-1 w-full;
+		@apply border border-gray-200 px-3 py-1 rounded w-full outline-offset-1;
 	}
 </style>
