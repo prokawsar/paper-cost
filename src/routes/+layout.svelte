@@ -13,4 +13,8 @@
 		/>
 	</nav>
 	<slot />
+
+	<div class="absolute bottom-0 w-full">
+		<p class="text-center text-gray-400">&#x1F4BB;Developed by Kawsar&#x1F60E;</p>
+	</div>
 </main>

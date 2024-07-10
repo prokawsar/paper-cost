@@ -13,7 +13,7 @@
 		rate: ''
 	}
 
-	let paperCount: Paper[] = []
+	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
 
@@ -30,7 +30,6 @@
 		if (!paperCount.length || hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
-
 		paperCount.forEach((paper) => {
 			const paperSize =
 				parseFloat(paper.height) * parseFloat(paper.width) * parseFloat(paper.thickness)
@@ -44,7 +43,7 @@
 	}
 
 	const clearAll = () => {
-		paperCount = []
+		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
 		perPaperResult.clear()
 	}
@@ -76,7 +75,8 @@
 						</p>
 
 						<button
-							class="border border-gray-200 rounded-md p-2 text-red-400 w-fit"
+							disabled={paperCount.length == 1 && i == 0}
+							class="border border-gray-200 rounded-md p-1.5 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-75"
 							on:click={() => removePaper(paper.id)}
 						>
 							<Icon icon="ph:trash-light" width="16px" />
