@@ -27,7 +27,7 @@
 	}
 
 	const calculatePaperCost = () => {
-		if (!paperCount.length) return
+		if (!paperCount.length || hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
 
@@ -46,6 +46,7 @@
 	const clearAll = () => {
 		paperCount = []
 		finalPrice = 0
+		perPaperResult.clear()
 	}
 
 	const fields = Object.keys(paperFields).filter((key) => key !== 'id')
@@ -66,7 +67,7 @@
 	<h1 class="text-2xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
-		<div class="flex flex-col gap-4 overflow-y-auto max-h-[85%] py-2">
+		<div class="flex flex-col gap-4 overflow-y-auto max-w-3xl max-h-[85%] py-2">
 			{#each paperCount as paper, i}
 				<div class="flex flex-col gap-1 items-center p-1 border border-dashed rounded shadow-md">
 					<div class="flex flex-row items-center px-1 justify-between w-full">
