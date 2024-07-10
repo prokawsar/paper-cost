@@ -59,7 +59,7 @@
 </script>
 
 <svelte:head>
-	<title>Paper calculator</title>
+	<title>Paper Cost Calculator</title>
 </svelte:head>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
