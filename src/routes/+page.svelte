@@ -14,6 +14,7 @@
 	}
 
 	let paperCount: Paper[] = []
+	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
 
 	const addPaper = () => {
@@ -27,15 +28,19 @@
 
 	const calculatePaperCost = () => {
 		if (!paperCount.length) return
-
+		perPaperResult.clear()
 		finalPrice = 0
 
 		paperCount.forEach((paper) => {
 			const paperSize =
 				parseFloat(paper.height) * parseFloat(paper.width) * parseFloat(paper.thickness)
 			const result = paperSize / PAPER_FIXED
-			finalPrice += result * parseFloat(paper.rate)
+			const totalPerPaper = result * parseFloat(paper.rate)
+
+			perPaperResult.set(paper.id, totalPerPaper)
+			finalPrice += totalPerPaper
 		})
+		perPaperResult = perPaperResult
 	}
 
 	const clearAll = () => {
@@ -52,13 +57,13 @@
 	<title>Paper calculator</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full flex-col gap-4 px-4 py-5 h-[90%]">
+<section class="max-w-6xl mx-auto flex w-full flex-col gap-4 px-4 py-5">
 	<h1 class="text-2xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between h-[90%] items-center">
-		<div class="flex flex-col gap-4 h-full overflow-auto">
+	<div class="flex flex-col w-full gap-5 items-center">
+		<div class="flex flex-col gap-4 overflow-y-auto">
 			{#each paperCount as paper, i}
-				<div class="flex flex-col gap-1 items-center">
+				<div class="flex flex-col gap-1 items-center p-1">
 					<div class="flex flex-row justify-between w-full">
 						<p class="font-bold w-fit">
 							Paper {i + 1}
@@ -71,10 +76,19 @@
 							<Icon icon="ph:trash-light" width="16px" />
 						</button>
 					</div>
-					<div class="grid grid-cols-4 w-full gap-1 px-1">
+					<div class="grid grid-cols-5 w-full gap-1 items-center overflow-x-auto p-1">
 						{#each fields as field}
 							<Input bind:value={paper[field]} placeholder={field} />
 						{/each}
+						<div class="flex justify-center">
+							<p
+								class="w-10 text-end {perPaperResult.get(paper.id)
+									? 'font-semibold'
+									: 'font-light text-gray-400'}"
+							>
+								{perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
+							</p>
+						</div>
 					</div>
 				</div>
 			{/each}
