@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Input from '$lib/elements/Input.svelte'
+	import Result from '$lib/elements/Result.svelte'
 	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
@@ -56,7 +57,7 @@
 		{#each paperCount as paper, i}
 			<div class="flex flex-col gap-1 items-center">
 				<div class="flex flex-row justify-between w-full">
-					<p class="text-teal-600 font-bold w-fit">
+					<p class="font-bold w-fit">
 						Paper {i + 1}
 					</p>
 
@@ -74,11 +75,14 @@
 				</div>
 			</div>
 		{/each}
-		<div class="font-bold text-xl text-center">
+		<!-- Calculate result section -->
+		<div class="font-bold text-lg flex w-full">
 			{#if finalPrice}
-				{finalPrice.toFixed(2)}
+				<Result total={finalPrice} />
 			{/if}
 		</div>
+
+		<!-- Button section -->
 		<div
 			class:justify-between={paperCount.length}
 			class="flex flex-row justify-center w-full max-w-3xl"
