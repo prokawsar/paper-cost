@@ -20,6 +20,7 @@
 		"@sveltejs/adapter-vercel": "^5.4.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/mixpanel-browser": "^2.49.0",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.27",
 		"prettier": "^2.8.0",
@@ -35,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"@fontsource/jost": "^5.0.18",
+		"mixpanel-browser": "^2.53.0",
 		"tippy.js": "^6.3.7"
 	}
 }

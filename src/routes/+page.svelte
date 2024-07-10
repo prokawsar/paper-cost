@@ -4,6 +4,7 @@
 	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
+	import mixpanel from 'mixpanel-browser'
 
 	const paperFields = {
 		id: '',
@@ -40,6 +41,8 @@
 			finalPrice += totalPerPaper
 		})
 		perPaperResult = perPaperResult
+
+		mixpanel.track('Calculated Paper Price')
 	}
 
 	const clearAll = () => {
