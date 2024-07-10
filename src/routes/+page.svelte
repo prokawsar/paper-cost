@@ -50,6 +50,11 @@
 
 	const fields = Object.keys(paperFields).filter((key) => key !== 'id')
 
+	$: hasNullValue =
+		paperCount &&
+		paperCount.find((paper) => {
+			return !paper.height || !paper.width || !paper.thickness || !paper.rate
+		})
 	$: paperCount.length == 0 ? clearAll() : ''
 </script>
 
@@ -57,11 +62,11 @@
 	<title>Paper calculator</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-2xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full gap-5 items-center">
-		<div class="flex flex-col gap-4 overflow-y-auto">
+	<div class="flex flex-col w-full justify-between gap-5 h-[90%] items-center">
+		<div class="flex flex-col gap-4 overflow-y-auto max-h-[85%]">
 			{#each paperCount as paper, i}
 				<div class="flex flex-col gap-1 items-center p-1">
 					<div class="flex flex-row justify-between w-full">
@@ -124,7 +129,8 @@
 				{/if}
 				{#if paperCount.length}
 					<button
-						class="border font-semibold border-gray-200 rounded-md px-3 py-1 text-teal-600 w-fit"
+						disabled={!!hasNullValue}
+						class="border font-semibold border-gray-200 rounded-md px-3 py-1 text-teal-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-60"
 						on:click={calculatePaperCost}
 					>
 						Calculate
