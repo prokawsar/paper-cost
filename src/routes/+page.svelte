@@ -65,12 +65,12 @@
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-2xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between gap-5 h-[90%] items-center">
-		<div class="flex flex-col gap-4 overflow-y-auto max-h-[85%]">
+	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
+		<div class="flex flex-col gap-4 overflow-y-auto max-h-[85%] py-2">
 			{#each paperCount as paper, i}
-				<div class="flex flex-col gap-1 items-center p-1">
-					<div class="flex flex-row justify-between w-full">
-						<p class="font-bold w-fit">
+				<div class="flex flex-col gap-1 items-center p-1 border border-dashed rounded shadow-md">
+					<div class="flex flex-row items-center px-1 justify-between w-full">
+						<p class="w-fit">
 							Paper {i + 1}
 						</p>
 
@@ -114,7 +114,7 @@
 			>
 				<button
 					disabled={paperCount.length == MAX_PAPER}
-					class="border border-slate-300 rounded-md text-sm px-3 py-1 w-fit disabled:text-slate-400"
+					class="border border-slate-300 rounded-md text-sm text-gray-600 px-3 py-1 w-fit disabled:text-slate-400"
 					on:click={addPaper}
 				>
 					Add paper

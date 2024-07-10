@@ -12,6 +12,6 @@
 
 <style lang="postcss">
 	.input-field {
-		@apply border border-gray-200 px-3 py-1 rounded w-full outline-offset-1;
+		@apply border border-dashed border-gray-200 px-3 py-1 rounded w-full outline-offset-1;
 	}
 </style>
