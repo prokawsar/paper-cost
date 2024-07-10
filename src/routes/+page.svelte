@@ -76,7 +76,7 @@
 
 						<button
 							disabled={paperCount.length == 1 && i == 0}
-							class="border border-gray-200 rounded-md p-1.5 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-75"
+							class="border border-gray-200 rounded-md p-1.5 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-45"
 							on:click={() => removePaper(paper.id)}
 						>
 							<Icon icon="ph:trash-light" width="16px" />
