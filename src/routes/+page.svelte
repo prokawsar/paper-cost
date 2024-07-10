@@ -42,7 +42,16 @@
 		})
 		perPaperResult = perPaperResult
 
-		mixpanel.track('Calculated Paper Price')
+		// mixpanel data prepare
+		const perPageData: number[] = []
+		perPaperResult.forEach((data) => {
+			perPageData.push(data)
+		})
+
+		mixpanel.track('Calculated Paper Price', {
+			perPaperResult: perPageData,
+			finalPrice
+		})
 	}
 
 	const clearAll = () => {
