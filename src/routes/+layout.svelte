@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { PUBLIC_MIX_TOKEN } from '$env/static/public'
 	import '$lib/app.css'
 	import '@fontsource/jost'
@@ -20,6 +21,15 @@
 		<div
 			class="w-full max-w-6xl mx-auto bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]"
 		/>
+		<div class="px-4 flex w-full mt-2">
+			<div
+				class="flex w-full flex-row gap-3 bg-slate-100 py-1 px-2 rounded border-dashed border border-orange-400"
+			>
+				<a href="/" class:hidden={$page.url.pathname == '/'} class="h-full">Back</a>
+				<a href="/history" class:hidden={$page.url.pathname == '/history'} class="h-full">History</a
+				>
+			</div>
+		</div>
 	</nav>
 	<slot />
 
