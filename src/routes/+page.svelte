@@ -45,6 +45,7 @@
 
 		// Saving to history
 		$paperHistoryStore.history.push({
+			id: makeid(6),
 			finalPrice,
 			date: new Date(),
 			papers: paperCount

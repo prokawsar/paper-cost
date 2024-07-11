@@ -3,6 +3,7 @@ import { persisted } from 'svelte-persisted-store'
 import type { Writable } from 'svelte/store'
 
 export type PaperHistory = {
+	id: string
 	finalPrice: number
 	date?: Date
 	papers: Paper[]

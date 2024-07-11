@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Input from '$lib/elements/Input.svelte'
 	import { paperHistoryStore } from '$lib/stores'
 	import days from 'dayjs'
 	import Icon from '@iconify/svelte'
@@ -11,33 +10,22 @@
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="flex flex-col gap-2 overflow-y-auto w-full max-w-3xl py-2">
 			{#if $paperHistoryStore.history.length}
-				{#each $paperHistoryStore.history as { finalPrice, papers, date }, i}
+				{#each $paperHistoryStore.history as { id, finalPrice, papers, date }, i}
 					<div
 						class="flex flex-col gap-1 items-center w-full p-2 border border-dashed rounded shadow-sm"
 					>
-						<div class="flex flex-row items-center pl-1 justify-between w-full">
+						<a href="/history/{id}" class="flex flex-row items-center pl-1 justify-between w-full">
 							<p class="w-fit">
-								{days(date).format('DD-MM-YYYY')}
+								{days(date).format('DD-MM-YYYY hh:mmA')}
 							</p>
-							<p>
+							<p class="text-gray-500">
 								{finalPrice.toFixed(2)}
 							</p>
-						</div>
-						<!-- <div class="grid grid-cols-5 w-full gap-1 items-center overflow-x-auto p-1">
-							{#each papers as field}
-								<Input bind:value={field.height} disabled />
-								<Input bind:value={field.width} disabled />
-								<Input bind:value={field.thickness} disabled />
-								<Input bind:value={field.rate} disabled />
-							{/each}
-							<div class="flex justify-start">
-								<p>
-									= {finalPrice.toFixed(2)}
-								</p>
-							</div>
-						</div> -->
+						</a>
 					</div>
 				{/each}
+			{:else}
+				<p class="text-center text-gray-500">No history yet</p>
 			{/if}
 		</div>
 	</div>
