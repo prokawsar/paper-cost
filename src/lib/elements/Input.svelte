@@ -1,9 +1,11 @@
 <script lang="ts">
 	export let value: string
 	export let placeholder: string = ''
+	export let disabled: boolean = false
 </script>
 
 <input
+	{disabled}
 	class="input-field focus:outline-dashed focus:outline-gray-600"
 	type="number"
 	{placeholder}

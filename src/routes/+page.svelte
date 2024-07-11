@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Input from '$lib/elements/Input.svelte'
 	import Result from '$lib/elements/Result.svelte'
+	import { paperHistoryStore } from '$lib/stores'
 	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
@@ -13,7 +14,7 @@
 		thickness: '',
 		rate: ''
 	}
-
+	$: console.log($paperHistoryStore.history)
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
@@ -41,6 +42,13 @@
 			finalPrice += totalPerPaper
 		})
 		perPaperResult = perPaperResult
+
+		// Saving to history
+		$paperHistoryStore.history.push({
+			finalPrice,
+			date: new Date(),
+			papers: paperCount
+		})
 
 		// mixpanel data prepare
 		const perPageData: number[] = []
@@ -75,7 +83,7 @@
 </svelte:head>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
-	<h1 class="text-2xl text-center">Paper Cost</h1>
+	<h1 class="text-xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="flex flex-col gap-4 overflow-y-auto max-w-3xl max-h-[85%] py-2">
