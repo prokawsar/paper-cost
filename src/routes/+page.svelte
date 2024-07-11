@@ -83,7 +83,7 @@
 	<title>Paper Cost Calculator</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-xl text-center">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
