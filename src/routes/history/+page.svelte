@@ -15,7 +15,7 @@
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="flex flex-col gap-2 overflow-y-auto w-full max-w-3xl py-2">
 			{#if $paperHistoryStore.history.length}
-				{#each $paperHistoryStore.history as { id, finalPrice, papers, date }, i}
+				{#each $paperHistoryStore.history.reverse() as { id, finalPrice, papers, date }, i}
 					<div
 						class="flex flex-col gap-1 items-center w-full p-2 border border-dashed rounded shadow-sm"
 					>
