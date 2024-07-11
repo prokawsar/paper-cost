@@ -14,7 +14,7 @@
 		thickness: '',
 		rate: ''
 	}
-	$: console.log($paperHistoryStore.history)
+
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
