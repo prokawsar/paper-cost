@@ -9,14 +9,14 @@
 
 	const paperFields = {
 		id: '',
-		height: '',
+		length: '',
 		width: '',
 		thickness: '',
 		rate: ''
 	}
 
-	const placeholders = {
-		height: 'L',
+	const placeholders: { [key: string]: string } = {
+		length: 'L',
 		width: 'W',
 		thickness: 'GSM',
 		rate: 'R'
@@ -41,7 +41,7 @@
 		finalPrice = 0
 		paperCount.forEach((paper) => {
 			const paperSize =
-				parseFloat(paper.height) * parseFloat(paper.width) * parseFloat(paper.thickness)
+				parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
 			const result = paperSize / PAPER_FIXED
 			const totalPerPaper = result * parseFloat(paper.rate)
 
@@ -81,7 +81,7 @@
 	$: hasNullValue =
 		paperCount &&
 		paperCount.find((paper) => {
-			return !paper.height || !paper.width || !paper.thickness || !paper.rate
+			return !paper.length || !paper.width || !paper.thickness || !paper.rate
 		})
 	$: paperCount.length == 0 ? clearAll() : ''
 </script>

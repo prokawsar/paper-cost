@@ -1,6 +1,6 @@
 export type Paper = {
 	id: string
-	height: string
+	length: string
 	width: string
 	thickness: string
 	rate: string
