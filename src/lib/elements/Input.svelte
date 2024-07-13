@@ -6,7 +6,7 @@
 
 <input
 	{disabled}
-	class="input-field focus:outline-dashed focus:outline-gray-600"
+	class="input-field focus:!border-teal-500"
 	type="number"
 	{placeholder}
 	bind:value
@@ -14,6 +14,6 @@
 
 <style lang="postcss">
 	.input-field {
-		@apply border w-16 border-dashed border-gray-200 p-1 rounded outline-offset-1;
+		@apply border border-gray-600 w-16 p-1 rounded;
 	}
 </style>
