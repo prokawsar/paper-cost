@@ -91,7 +91,7 @@
 </svelte:head>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 py-5">
-	<h1 class="text-xl text-center text-teal-500">Paper Cost</h1>
+	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="flex flex-col overflow-y-auto max-w-3xl max-h-[85%] py-2">
