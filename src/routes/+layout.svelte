@@ -35,7 +35,7 @@
 
 	<div class="absolute bottom-0 w-full">
 		<p class="text-center text-gray-400">
-			&#x1F4BB;Developed by <a href="https://github.com/prokawsar" target="_blank">Kawsar</a
+			&#x1F4BB;Developed by <a href="https://github.com/prokawsar" target="_blank">ProKawsar</a
 			>&#x1F60E;
 		</p>
 	</div>
