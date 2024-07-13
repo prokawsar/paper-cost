@@ -94,22 +94,13 @@
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
-		<div class="flex flex-col overflow-y-auto max-w-3xl max-h-[85%] py-2">
+		<div class="flex flex-col overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full">
 			{#each paperCount as paper, i}
-				<div class="flex flex-col gap-1 items-center rounded">
-					<!-- <div class="flex flex-row items-center pl-1 justify-end w-full">
+				<div class="flex flex-row items-center justify-between rounded">
+					<div class="flex flex-row gap-1 items-center overflow-x-auto">
 						<button
 							disabled={paperCount.length == 1 && i == 0}
-							class="border border-gray-200 rounded-md p-1 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-45"
-							on:click={() => removePaper(paper.id)}
-						>
-							<Icon icon="ph:trash-light" width="16px" />
-						</button>
-					</div> -->
-					<div class="grid grid-cols-6 w-full gap-1 items-center overflow-x-auto">
-						<button
-							disabled={paperCount.length == 1 && i == 0}
-							class="border border-gray-200 rounded-md p-1 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-45"
+							class="border border-gray-200 rounded-md text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-45"
 							on:click={() => removePaper(paper.id)}
 						>
 							<Icon icon="ph:trash-light" width="16px" />
@@ -117,13 +108,11 @@
 						{#each fields as field}
 							<Input bind:value={paper[field]} placeholder={placeholders[field]} />
 						{/each}
-						<div class="flex justify-start">
-							<p
-								class={perPaperResult.get(paper.id) ? 'font-semibold' : 'font-light text-gray-400'}
-							>
-								= {perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
-							</p>
-						</div>
+					</div>
+					<div class="flex justify-start">
+						<p class={perPaperResult.get(paper.id) ? 'font-semibold' : 'font-light text-gray-400'}>
+							= {perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
+						</p>
 					</div>
 				</div>
 			{/each}
