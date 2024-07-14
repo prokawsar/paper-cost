@@ -1,6 +1,5 @@
-# dashboard-starter
+# Determine Paper Cost
 
-This is starter repo for frontend project. With stack of Svelte, Tailwind, TypeScript, Charts.js, Fontawesome
 
 ## Tech Stack
 
@@ -14,16 +13,11 @@ This is starter repo for frontend project. With stack of Svelte, Tailwind, TypeS
 Tools
 
 ```bash
--> Posthog (For track)
--> Chart.js (For chart)
--> Tippy.js (For tooltip)
--> @inlang/sdk-js (For language support)
--> svelte-fa (fontawesome icons)
 ```
 
 ## After Cloning this project
 
-If you're seeing this, you've probably already done this step. Congrats!
+You will need to install dependency!
 
 ```bash
 # install all dependency
