@@ -27,19 +27,19 @@
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
-	let inputs: NodeListOf<HTMLInputElement>
+	let inputs: NodeListOf<HTMLInputElement> | null
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = 0
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
 		paperCount = paperCount
-		await tick()
-		inputs = inputGroupRef.querySelectorAll('input')
+		getAllInputs()
 	}
 
-	const removePaper = (idx: string) => {
+	const removePaper = async (idx: string) => {
 		paperCount = paperCount.filter((field) => field.id != idx)
+		getAllInputs()
 	}
 
 	const calculatePaperCost = () => {
@@ -80,7 +80,22 @@
 	const clearAll = () => {
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
+		focusedIndex = 0
 		perPaperResult.clear()
+		getAllInputs()
+		setFocus()
+	}
+
+	const getAllInputs = async () => {
+		await tick()
+		inputs = inputGroupRef.querySelectorAll('input')
+	}
+
+	const setFocus = (element?: HTMLInputElement) => {
+		if (inputs) {
+			$focusedInputStore = element || inputs[0]
+			$focusedInputStore.focus()
+		}
 	}
 
 	$: hasNullValue =
@@ -88,7 +103,6 @@
 		paperCount.find((paper) => {
 			return !paper.length || !paper.width || !paper.thickness || !paper.rate
 		})
-	$: paperCount.length == 0 ? clearAll() : ''
 
 	// Handling and maintaining focused input index
 	$: inputsArray = inputs && Array.from(inputs)
@@ -100,23 +114,19 @@
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
-		if (event.key === 'Enter') {
+		if (event.key === 'Enter' && inputs) {
 			focusedIndex++
 			event.preventDefault()
 			const nextInput = inputs[focusedIndex]
 			if (nextInput) {
-				$focusedInputStore = nextInput
-				$focusedInputStore.focus()
+				setFocus(nextInput)
 			}
 		}
 	}
 
 	onMount(() => {
 		inputs = inputGroupRef.querySelectorAll('input')
-		if (inputs.length) {
-			$focusedInputStore = inputs[0]
-			$focusedInputStore.focus()
-		}
+		setFocus()
 	})
 </script>
 
