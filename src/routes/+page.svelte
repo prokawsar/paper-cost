@@ -176,10 +176,7 @@
 		<!-- Button and result section -->
 		<div class="flex flex-col justify-center max-w-3xl w-full gap-4">
 			<!-- button section -->
-			<div
-				class:justify-between={paperCount.length}
-				class="flex flex-row justify-center w-full mt-3"
-			>
+			<div class="flex flex-row justify-between w-full mt-3">
 				<Button
 					classNames="text-sm"
 					on:click={addPaper}
