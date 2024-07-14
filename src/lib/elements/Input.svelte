@@ -26,6 +26,6 @@
 
 <style lang="postcss">
 	.input-field {
-		@apply border border-gray-400 w-14 p-1 rounded;
+		@apply border border-gray-400 w-12 p-1 rounded;
 	}
 </style>

@@ -4,7 +4,7 @@
 	import Result from '$lib/elements/Result.svelte'
 	import { paperHistoryStore } from '$lib/stores'
 	import dayjs from 'dayjs'
-	import type { CostHistoryType } from '$lib/utils/services'
+	import { calculateCost, type CostHistoryType } from '$lib/utils/services'
 
 	const data: CostHistoryType[] = $paperHistoryStore.filter(
 		(history) => history.id == $page.params.id
@@ -29,18 +29,20 @@
 		<div class="flex flex-col overflow-y-auto w-full max-w-3xl py-2">
 			{#if data.length}
 				{#each data as history, i}
-					{#each history.papers as { length, width, thickness, rate }, i}
-						<div class="flex flex-col gap-1 items-center w-full rounded">
-							<div class="grid grid-cols-4 w-full gap-1 items-center overflow-x-auto p-1">
+					{#each history.papers as { length, width, thickness, rate, id }, i}
+						<div class="flex flex-col items-center w-full rounded">
+							<div
+								class="flex flex-row w-full gap-1 items-center justify-between overflow-x-auto p-1"
+							>
 								<Input bind:value={length} disabled />
 								<Input bind:value={width} disabled />
 								<Input bind:value={thickness} disabled />
 								<Input bind:value={rate} disabled />
-								<!-- <div class="flex justify-start">
-								<p>
-									= {finalPrice.toFixed(2)}
-								</p>
-							</div> -->
+								<div class="flex justify-center">
+									<p class="font-semibold">
+										= {calculateCost({ length, width, thickness, rate, id }).toFixed(2)}
+									</p>
+								</div>
 							</div>
 						</div>
 					{/each}
