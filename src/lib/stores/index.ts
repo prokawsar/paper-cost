@@ -1,6 +1,6 @@
 import type { Paper } from '$lib/utils/services'
 import { persisted } from 'svelte-persisted-store'
-import type { Writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 
 export type PaperHistory = {
 	id: string
@@ -13,3 +13,4 @@ function getPaperStore(): Writable<{ history: PaperHistory[] }> {
 }
 
 export const paperHistoryStore = getPaperStore()
+export const focusedInputStore: Writable<HTMLInputElement | null> = writable(null)

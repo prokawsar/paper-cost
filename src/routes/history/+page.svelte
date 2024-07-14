@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { paperHistoryStore } from '$lib/stores'
 	import days from 'dayjs'
-	import Icon from '@iconify/svelte'
 </script>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">

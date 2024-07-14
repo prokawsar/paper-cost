@@ -4,15 +4,15 @@
 	"start_url": "/",
 	"icons": [
 		{
-			"src": "logo.png",
-			"type": "image/png",
+			"src": "logo.jpeg",
+			"type": "image/jpeg",
 			"sizes": "512x512",
 			"purpose": "any maskable"
 		}
 	],
-	"background_color": "#3367D6",
+	"background_color": "#000",
 	"display": "standalone",
 	"scope": "/",
-	"theme_color": "#3367D6",
+	"theme_color": "#000",
 	"description": "Paper Cost Calculator"
 }

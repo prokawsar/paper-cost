@@ -1,31 +1,45 @@
 <script lang="ts">
+	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import Result from '$lib/elements/Result.svelte'
-	import { paperHistoryStore } from '$lib/stores'
+	import { focusedInputStore, paperHistoryStore } from '$lib/stores'
 	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
+	import { onMount, tick } from 'svelte'
 
 	const paperFields = {
 		id: '',
-		height: '',
+		length: '',
 		width: '',
 		thickness: '',
 		rate: ''
 	}
+	const placeholders: { [key: string]: string } = {
+		length: 'L',
+		width: 'W',
+		thickness: 'GSM',
+		rate: 'R'
+	}
+	const fields = Object.keys(paperFields).filter((key) => key !== 'id')
 
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
+	let inputs: NodeListOf<HTMLInputElement> | null
+	let inputGroupRef: HTMLDivElement
+	let focusedIndex = 0
 
-	const addPaper = () => {
+	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
 		paperCount = paperCount
+		getAllInputs()
 	}
 
-	const removePaper = (idx: string) => {
+	const removePaper = async (idx: string) => {
 		paperCount = paperCount.filter((field) => field.id != idx)
+		getAllInputs()
 	}
 
 	const calculatePaperCost = () => {
@@ -34,7 +48,7 @@
 		finalPrice = 0
 		paperCount.forEach((paper) => {
 			const paperSize =
-				parseFloat(paper.height) * parseFloat(paper.width) * parseFloat(paper.thickness)
+				parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
 			const result = paperSize / PAPER_FIXED
 			const totalPerPaper = result * parseFloat(paper.rate)
 
@@ -66,17 +80,54 @@
 	const clearAll = () => {
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
+		focusedIndex = 0
 		perPaperResult.clear()
+		getAllInputs()
+		setFocus()
 	}
 
-	const fields = Object.keys(paperFields).filter((key) => key !== 'id')
+	const getAllInputs = async () => {
+		await tick()
+		inputs = inputGroupRef.querySelectorAll('input')
+	}
+
+	const setFocus = (element?: HTMLInputElement) => {
+		if (inputs) {
+			$focusedInputStore = element || inputs[0]
+			$focusedInputStore.focus()
+		}
+	}
 
 	$: hasNullValue =
 		paperCount &&
 		paperCount.find((paper) => {
-			return !paper.height || !paper.width || !paper.thickness || !paper.rate
+			return !paper.length || !paper.width || !paper.thickness || !paper.rate
 		})
-	$: paperCount.length == 0 ? clearAll() : ''
+
+	// Handling and maintaining focused input index
+	$: inputsArray = inputs && Array.from(inputs)
+	$: focusedInputID = $focusedInputStore && $focusedInputStore.getAttribute('id')
+	$: if (focusedInputID && inputsArray && inputsArray.length) {
+		focusedIndex = inputsArray
+			.map((input) => input.getAttribute('id'))
+			.findIndex((id) => focusedInputID == id)
+	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && inputs) {
+			focusedIndex++
+			event.preventDefault()
+			const nextInput = inputs[focusedIndex]
+			if (nextInput) {
+				setFocus(nextInput)
+			}
+		}
+	}
+
+	onMount(() => {
+		inputs = inputGroupRef.querySelectorAll('input')
+		setFocus()
+	})
 </script>
 
 <svelte:head>
@@ -84,36 +135,39 @@
 </svelte:head>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 py-5">
-	<h1 class="text-xl text-center">Paper Cost</h1>
+	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
-		<div class="flex flex-col gap-4 overflow-y-auto max-w-3xl max-h-[85%] py-2">
+		<div
+			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
+			bind:this={inputGroupRef}
+		>
 			{#each paperCount as paper, i}
-				<div class="flex flex-col gap-1 items-center p-1 border border-dashed rounded shadow-md">
-					<div class="flex flex-row items-center pl-1 justify-between w-full">
-						<p class="w-fit">
-							Paper {i + 1}
-						</p>
-
+				<div class="flex flex-row items-center justify-between rounded">
+					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
 							disabled={paperCount.length == 1 && i == 0}
-							class="border border-gray-200 rounded-md p-1 text-red-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-45"
+							class="border border-gray-400 rounded-md text-red-600 p-1 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 							on:click={() => removePaper(paper.id)}
 						>
 							<Icon icon="ph:trash-light" width="16px" />
 						</button>
-					</div>
-					<div class="grid grid-cols-5 w-full gap-1 items-center overflow-x-auto p-1">
 						{#each fields as field}
-							<Input bind:value={paper[field]} placeholder={field} />
+							<Input
+								bind:value={paper[field]}
+								placeholder={placeholders[field]}
+								on:keydown={(event) => handleKeyDown(event)}
+							/>
 						{/each}
-						<div class="flex justify-start">
-							<p
-								class={perPaperResult.get(paper.id) ? 'font-semibold' : 'font-light text-gray-400'}
-							>
-								= {perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
-							</p>
-						</div>
+					</div>
+					<div class="flex flex-grow justify-center px-1">
+						<p
+							class="{perPaperResult.get(paper.id)
+								? 'font-semibold'
+								: 'font-light text-gray-400'} pr-[2px]"
+						>
+							= {perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
+						</p>
 					</div>
 				</div>
 			{/each}
@@ -121,24 +175,14 @@
 
 		<!-- Button and result section -->
 		<div class="flex flex-col justify-center max-w-3xl w-full gap-4">
-			<!-- result section -->
-			<div class="font-bold text-lg flex w-full">
-				{#if finalPrice}
-					<Result total={finalPrice} />
-				{/if}
-			</div>
 			<!-- button section -->
-			<div
-				class:justify-between={paperCount.length}
-				class="flex flex-row justify-center w-full mt-3"
-			>
-				<button
-					disabled={paperCount.length == MAX_PAPER}
-					class="border border-slate-300 rounded-md text-sm text-gray-600 px-3 py-1 w-fit disabled:text-slate-400"
+			<div class="flex flex-row justify-between w-full mt-3">
+				<Button
+					classNames="text-sm"
 					on:click={addPaper}
-				>
-					Add paper
-				</button>
+					disabled={paperCount.length == MAX_PAPER}
+					text="Add paper"
+				/>
 				{#if finalPrice}
 					<button
 						class="border border-red-200 rounded-md px-3 py-1 text-red-400 w-fit"
@@ -148,13 +192,13 @@
 					</button>
 				{/if}
 				{#if paperCount.length}
-					<button
-						disabled={!!hasNullValue}
-						class="border font-semibold border-gray-200 rounded-md px-3 py-1 text-teal-600 w-fit disabled:cursor-not-allowed disabled:text-opacity-60"
-						on:click={calculatePaperCost}
-					>
-						Calculate
-					</button>
+					<Button on:click={calculatePaperCost} disabled={!!hasNullValue} text="Calculate" />
+				{/if}
+			</div>
+			<!-- result section -->
+			<div class="font-bold text-lg flex w-full">
+				{#if finalPrice}
+					<Result total={finalPrice} />
 				{/if}
 			</div>
 		</div>
