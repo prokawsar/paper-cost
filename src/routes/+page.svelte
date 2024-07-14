@@ -2,8 +2,8 @@
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import Result from '$lib/elements/Result.svelte'
-	import { focusedInputStore, paperHistoryStore } from '$lib/stores'
-	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
+	import { focusedInputStore } from '$lib/stores'
+	import { addHistory, calculateCost, MAX_PAPER, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
@@ -30,6 +30,7 @@
 	let inputs: NodeListOf<HTMLInputElement> | null
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = 0
+	let customer_name = ''
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
@@ -47,10 +48,7 @@
 		perPaperResult.clear()
 		finalPrice = 0
 		paperCount.forEach((paper) => {
-			const paperSize =
-				parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
-			const result = paperSize / PAPER_FIXED
-			const totalPerPaper = result * parseFloat(paper.rate)
+			const totalPerPaper = calculateCost(paper)
 
 			perPaperResult.set(paper.id, totalPerPaper)
 			finalPrice += totalPerPaper
@@ -58,13 +56,11 @@
 		perPaperResult = perPaperResult
 
 		// Saving to history
-		$paperHistoryStore.history.push({
-			id: makeid(6),
-			finalPrice,
-			date: new Date(),
+		addHistory({
+			name: customer_name,
+			final_price: finalPrice,
 			papers: paperCount
 		})
-
 		// mixpanel data prepare
 		const perPageData: number[] = []
 		perPaperResult.forEach((data) => {
@@ -134,10 +130,18 @@
 	<title>Paper Cost Calculator</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-3 px-4 py-3">
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
+	<div class="flex flex-col w-full justify-between gap-2 h-[90%] items-center">
+		<div class="flex w-full items-start">
+			<input
+				bind:value={customer_name}
+				type="text"
+				placeholder="Customer name"
+				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
+			/>
+		</div>
 		<div
 			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
 			bind:this={inputGroupRef}

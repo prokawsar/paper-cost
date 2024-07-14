@@ -6,6 +6,7 @@
 	export let value: string
 	export let placeholder: string = ''
 	export let disabled: boolean = false
+	export let classNames: string = ''
 
 	let inputRef: HTMLInputElement
 </script>
@@ -14,7 +15,7 @@
 	bind:this={inputRef}
 	{id}
 	{disabled}
-	class="input-field focus:!border-[1.5px] focus:!border-teal-500 focus:outline-none"
+	class="input-field focus:!border-[1.5px] focus:!border-teal-500 focus:outline-none {classNames}"
 	type="number"
 	{placeholder}
 	bind:value
