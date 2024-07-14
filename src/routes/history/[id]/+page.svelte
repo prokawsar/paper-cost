@@ -9,6 +9,9 @@
 	const data: CostHistoryType[] = $paperHistoryStore.filter(
 		(history) => history.id == $page.params.id
 	)
+
+	// export let data
+	// let history: CostHistoryType = data.history[0]
 </script>
 
 <svelte:head>

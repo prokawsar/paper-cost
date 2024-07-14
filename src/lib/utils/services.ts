@@ -38,6 +38,14 @@ export const addHistory = async (history: CostHistoryType) => {
 	return error
 }
 
+export const getHistory = async (id: string): Promise<CostHistoryType | null> => {
+	const { data, error } = await supabase.from('history').select().eq('id', id)
+	if (!error) {
+		return data as unknown as CostHistoryType
+	}
+	return null
+}
+
 export const deleteHistory = async (id: string) => {
 	const response = await supabase.from('history').delete().eq('id', id)
 	return response
