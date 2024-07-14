@@ -160,7 +160,7 @@
 							/>
 						{/each}
 					</div>
-					<div class="flex justify-start">
+					<div class="flex flex-grow justify-center px-1">
 						<p
 							class="{perPaperResult.get(paper.id)
 								? 'font-semibold'
