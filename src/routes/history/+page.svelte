@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
+	import Loader from '$lib/elements/Loader.svelte'
 	import { paperHistoryStore } from '$lib/stores'
 	import { deleteHistory } from '$lib/utils/services.js'
 	import Icon from '@iconify/svelte'
 	import days from 'dayjs'
 
 	export let data
+	let isLoading = false
 
 	$paperHistoryStore = data.histories
 
 	const handleDelete = async (id: string) => {
+		isLoading = true
 		await deleteHistory(id)
 		await invalidateAll()
+		isLoading = false
 	}
 </script>
 
@@ -28,33 +32,42 @@
 	</div>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
-		<div class="flex flex-col gap-2 overflow-y-auto w-full max-w-3xl py-2">
-			{#if data.histories.length}
-				{#each data.histories.reverse() as { name, id, final_price, papers, created_at }, i}
-					<div
-						class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
-					>
-						<a href="/history/{id}" class="flex flex-row items-center pl-1 justify-between w-full">
-							<p class:hidden={!name} class="w-fit">
-								{name}
-							</p>
-							<p class="w-fit text-gray-500">
-								{days(created_at).format('DD-MM-YYYY hh:mmA')}
-							</p>
-							<p class="text-gray-500">
-								{final_price.toFixed(2)}
-							</p>
-							<button
-								class="border border-gray-400 rounded-md text-red-600 p-1 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-								on:click|stopPropagation|preventDefault={() => handleDelete(id)}
+		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2">
+			{#if !isLoading}
+				{#if data.histories.length}
+					{#each data.histories.reverse() as { name, id, final_price, papers, created_at }, i}
+						<div
+							class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
+						>
+							<a
+								href="/history/{id}"
+								class="flex flex-row items-center pl-1 justify-between w-full"
 							>
-								<Icon icon="ph:trash-light" width="16px" />
-							</button>
-						</a>
-					</div>
-				{/each}
+								<p class:hidden={!name} class="w-fit">
+									{name}
+								</p>
+								<p class="w-fit text-gray-500">
+									{days(created_at).format('DD-MM-YYYY hh:mmA')}
+								</p>
+								<p class="text-gray-500">
+									{final_price.toFixed(2)}
+								</p>
+								<button
+									class="border border-gray-400 rounded-md text-red-600 p-1 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+									on:click|stopPropagation|preventDefault={() => handleDelete(id)}
+								>
+									<Icon icon="ph:trash-light" width="16px" />
+								</button>
+							</a>
+						</div>
+					{/each}
+				{:else}
+					<p class="text-center text-gray-500">No history yet</p>
+				{/if}
 			{:else}
-				<p class="text-center text-gray-500">No history yet</p>
+				<div class="fixed flex h-[70%] w-[90%] items-center justify-center">
+					<Loader />
+				</div>
 			{/if}
 		</div>
 	</div>
