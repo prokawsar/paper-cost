@@ -1,16 +1,18 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import Loader from '$lib/elements/Loader.svelte'
-	import { paperHistoryStore } from '$lib/stores'
 	import { deleteHistory } from '$lib/utils/services.js'
 	import Icon from '@iconify/svelte'
 	import days from 'dayjs'
+	import mixpanel from 'mixpanel-browser'
 
 	export let data
 	let isLoading = false
 	let deleteConfirm = ''
 
-	$paperHistoryStore = data.histories
+	mixpanel.track_pageview({
+		url: '/history'
+	})
 
 	const handleDelete = async (id: string) => {
 		isLoading = true
