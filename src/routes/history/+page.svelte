@@ -44,32 +44,32 @@
 								href="/history/{id}"
 								class="flex flex-row items-center pl-1 justify-between w-full"
 							>
-								<p class:hidden={!name} class="w-fit">
+								<p class:hidden={!name} class="w-fit truncate">
 									{name}
 								</p>
-								<p class="w-fit text-gray-500">
+								<p class="w-fit text-sm text-gray-500 truncate">
 									{days(created_at).format('DD-MM-YYYY hh:mmA')}
 								</p>
-								<p class="text-gray-500">
+								<p class="text-gray-500 text-sm truncate">
 									{final_price.toFixed(2)}
 								</p>
 								<div class="flex flex-row items-center gap-[2px]">
 									<button
 										class:hidden={deleteConfirm}
-										class="border border-gray-400 rounded-md text-red-600 p-1 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+										class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 										on:click|stopPropagation|preventDefault={() => (deleteConfirm = true)}
 									>
 										<Icon icon="ph:trash-light" width="16px" />
 									</button>
 									{#if deleteConfirm}
 										<button
-											class="border border-gray-400 p-1 rounded-md text-red-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 											on:click|stopPropagation|preventDefault={() => (deleteConfirm = false)}
 										>
 											<Icon icon="majesticons:multiply" width="16px" />
 										</button>
 										<button
-											class="border border-gray-400 p-1 rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											class="border border-green-300 p-[3px] rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 											on:click|stopPropagation|preventDefault={() => handleDelete(id)}
 										>
 											<Icon icon="teenyicons:tick-solid" width="15px" />

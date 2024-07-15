@@ -19,7 +19,7 @@
 </svelte:head>
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
-	<h1 class="text-xl text-center">History Details</h1>
+	<h1 class="text-xl text-center">Cost Details</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-row justify-between px-2 items-center">
 		<p>{data[0].name || ''}</p>
