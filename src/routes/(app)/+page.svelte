@@ -2,8 +2,15 @@
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import Result from '$lib/elements/Result.svelte'
-	import { focusedInputStore, paperHistoryStore } from '$lib/stores'
-	import { MAX_PAPER, PAPER_FIXED, type Paper } from '$lib/utils/services'
+	import { focusedInputStore, totalHistoryStore } from '$lib/stores'
+	import {
+		addHistory,
+		calculateCost,
+		getTotalHistory,
+		MAX_HISTORY,
+		MAX_PAPER,
+		type Paper
+	} from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
@@ -30,6 +37,7 @@
 	let inputs: NodeListOf<HTMLInputElement> | null
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = 0
+	let customer_name = ''
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
@@ -42,15 +50,12 @@
 		getAllInputs()
 	}
 
-	const calculatePaperCost = () => {
+	const calculatePaperCost = async () => {
 		if (!paperCount.length || hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
 		paperCount.forEach((paper) => {
-			const paperSize =
-				parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
-			const result = paperSize / PAPER_FIXED
-			const totalPerPaper = result * parseFloat(paper.rate)
+			const totalPerPaper = calculateCost(paper)
 
 			perPaperResult.set(paper.id, totalPerPaper)
 			finalPrice += totalPerPaper
@@ -58,13 +63,14 @@
 		perPaperResult = perPaperResult
 
 		// Saving to history
-		$paperHistoryStore.history.push({
-			id: makeid(6),
-			finalPrice,
-			date: new Date(),
-			papers: paperCount
-		})
-
+		if ($totalHistoryStore < MAX_HISTORY) {
+			addHistory({
+				name: customer_name,
+				final_price: finalPrice,
+				papers: paperCount
+			})
+			$totalHistoryStore = await getTotalHistory()
+		}
 		// mixpanel data prepare
 		const perPageData: number[] = []
 		perPaperResult.forEach((data) => {
@@ -115,8 +121,14 @@
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && inputs) {
-			focusedIndex++
 			event.preventDefault()
+			focusedIndex++
+			focusedIndex = Math.min(focusedIndex, inputs.length)
+			// Calculate on final input field
+			if (focusedIndex == inputs.length) {
+				calculatePaperCost()
+				return
+			}
 			const nextInput = inputs[focusedIndex]
 			if (nextInput) {
 				setFocus(nextInput)
@@ -124,9 +136,10 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		inputs = inputGroupRef.querySelectorAll('input')
 		setFocus()
+		$totalHistoryStore = await getTotalHistory()
 	})
 </script>
 
@@ -134,10 +147,23 @@
 	<title>Paper Cost Calculator</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-3 px-4 py-3">
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
+	<div class="flex flex-col w-full justify-between gap-2 h-[90%] items-center">
+		{#if $totalHistoryStore >= MAX_HISTORY}
+			<p class="text-sm text-yellow-600 animate-pulse">
+				Maximum history reached, delete some history!
+			</p>
+		{/if}
+		<div class="flex w-full items-start">
+			<input
+				bind:value={customer_name}
+				type="text"
+				placeholder="Customer name"
+				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
+			/>
+		</div>
 		<div
 			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
 			bind:this={inputGroupRef}
@@ -176,10 +202,7 @@
 		<!-- Button and result section -->
 		<div class="flex flex-col justify-center max-w-3xl w-full gap-4">
 			<!-- button section -->
-			<div
-				class:justify-between={paperCount.length}
-				class="flex flex-row justify-center w-full mt-3"
-			>
+			<div class="flex flex-row justify-between w-full mt-3">
 				<Button
 					classNames="text-sm"
 					on:click={addPaper}
