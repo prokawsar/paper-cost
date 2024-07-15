@@ -2,8 +2,15 @@
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import Result from '$lib/elements/Result.svelte'
-	import { focusedInputStore } from '$lib/stores'
-	import { addHistory, calculateCost, MAX_PAPER, type Paper } from '$lib/utils/services'
+	import { focusedInputStore, totalHistoryStore } from '$lib/stores'
+	import {
+		addHistory,
+		calculateCost,
+		getTotalHistory,
+		MAX_HISTORY,
+		MAX_PAPER,
+		type Paper
+	} from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
@@ -56,11 +63,13 @@
 		perPaperResult = perPaperResult
 
 		// Saving to history
-		addHistory({
-			name: customer_name,
-			final_price: finalPrice,
-			papers: paperCount
-		})
+		if ($totalHistoryStore <= MAX_HISTORY) {
+			addHistory({
+				name: customer_name,
+				final_price: finalPrice,
+				papers: paperCount
+			})
+		}
 		// mixpanel data prepare
 		const perPageData: number[] = []
 		perPaperResult.forEach((data) => {
@@ -120,9 +129,10 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		inputs = inputGroupRef.querySelectorAll('input')
 		setFocus()
+		$totalHistoryStore = await getTotalHistory()
 	})
 </script>
 
@@ -134,6 +144,11 @@
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-2 h-[90%] items-center">
+		{#if $totalHistoryStore >= MAX_HISTORY}
+			<p class="text-sm text-yellow-600 animate-pulse">
+				Maximum history reached, delete some history!
+			</p>
+		{/if}
 		<div class="flex w-full items-start">
 			<input
 				bind:value={customer_name}

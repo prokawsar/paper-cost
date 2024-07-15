@@ -19,6 +19,7 @@ export type CostHistoryType = {
 
 export const PAPER_FIXED = 1550000
 export const MAX_PAPER = 10
+export const MAX_HISTORY = 20
 
 export const calculateCost = (paper: Paper): number => {
 	const paperSize = parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
@@ -36,6 +37,14 @@ export const addHistory = async (history: CostHistoryType) => {
 		return data
 	}
 	return error
+}
+
+export const getTotalHistory = async (): Promise<number> => {
+	const { count } = await await supabase.from('history').select('*', { count: 'exact' })
+	if (count) {
+		return count
+	}
+	return 0
 }
 
 export const getHistory = async (id: string): Promise<CostHistoryType[] | null> => {
