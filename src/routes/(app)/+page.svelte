@@ -50,7 +50,7 @@
 		getAllInputs()
 	}
 
-	const calculatePaperCost = () => {
+	const calculatePaperCost = async () => {
 		if (!paperCount.length || hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
@@ -63,12 +63,13 @@
 		perPaperResult = perPaperResult
 
 		// Saving to history
-		if ($totalHistoryStore <= MAX_HISTORY) {
+		if ($totalHistoryStore < MAX_HISTORY) {
 			addHistory({
 				name: customer_name,
 				final_price: finalPrice,
 				papers: paperCount
 			})
+			$totalHistoryStore = await getTotalHistory()
 		}
 		// mixpanel data prepare
 		const perPageData: number[] = []
