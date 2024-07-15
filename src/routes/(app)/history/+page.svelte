@@ -8,7 +8,7 @@
 
 	export let data
 	let isLoading = false
-	let deleteConfirm = false
+	let deleteConfirm = ''
 
 	$paperHistoryStore = data.histories
 
@@ -36,7 +36,7 @@
 		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2">
 			{#if !isLoading}
 				{#if data.histories.length}
-					{#each data.histories.reverse() as { name, id, final_price, papers, created_at }, i}
+					{#each data.histories as { name, id, final_price, created_at }}
 						<div
 							class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
 						>
@@ -55,16 +55,16 @@
 								</p>
 								<div class="flex flex-row items-center gap-[2px]">
 									<button
-										class:hidden={deleteConfirm}
+										class:hidden={deleteConfirm == id}
 										class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-										on:click|stopPropagation|preventDefault={() => (deleteConfirm = true)}
+										on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
 									>
 										<Icon icon="ph:trash-light" width="16px" />
 									</button>
-									{#if deleteConfirm}
+									{#if deleteConfirm == id}
 										<button
 											class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-											on:click|stopPropagation|preventDefault={() => (deleteConfirm = false)}
+											on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
 										>
 											<Icon icon="majesticons:multiply" width="16px" />
 										</button>
