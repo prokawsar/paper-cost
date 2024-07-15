@@ -35,7 +35,7 @@
 	</div>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	<div class="flex flex-col w-full justify-between gap-4 h-[80%] items-center">
-		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2">
+		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
 				{#if data.histories.length}
 					{#each data.histories as { name, id, final_price, created_at }}
