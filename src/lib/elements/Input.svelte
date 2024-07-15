@@ -6,7 +6,6 @@
 	export let id: string = makeid(3)
 	export let value: string
 	export let type: string = 'number'
-	export let placeholder: string = ''
 	export let disabled: boolean = false
 	export let classNames: string = ''
 
@@ -24,11 +23,11 @@
 	{id}
 	{disabled}
 	class="input-field focus:!border-[1.5px] focus:!border-teal-500 focus:outline-none {classNames}"
-	{placeholder}
 	bind:value
 	on:keydown
 	on:focus
 	on:focus={() => ($focusedInputStore = inputRef)}
+	{...$$restProps}
 />
 
 <style lang="postcss">
