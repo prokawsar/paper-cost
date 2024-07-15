@@ -121,8 +121,14 @@
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && inputs) {
-			focusedIndex++
 			event.preventDefault()
+			focusedIndex++
+			focusedIndex = Math.min(focusedIndex, inputs.length)
+			// Calculate on final input field
+			if (focusedIndex == inputs.length) {
+				calculatePaperCost()
+				return
+			}
 			const nextInput = inputs[focusedIndex]
 			if (nextInput) {
 				setFocus(nextInput)
