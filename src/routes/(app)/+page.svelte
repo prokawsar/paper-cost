@@ -47,11 +47,13 @@
 
 	const removePaper = async (idx: string) => {
 		paperCount = paperCount.filter((field) => field.id != idx)
+		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
+		perPaperResult = perPaperResult
 		getAllInputs()
 	}
 
 	const calculatePaperCost = async () => {
-		if (!paperCount.length || hasNullValue) return
+		if (hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
 		paperCount.forEach((paper) => {
@@ -62,15 +64,6 @@
 		})
 		perPaperResult = perPaperResult
 
-		// Saving to history
-		if ($totalHistoryStore < MAX_HISTORY) {
-			addHistory({
-				name: customer_name,
-				final_price: finalPrice,
-				papers: paperCount
-			})
-			$totalHistoryStore = await getTotalHistory()
-		}
 		// mixpanel data prepare
 		const perPageData: number[] = []
 		perPaperResult.forEach((data) => {
@@ -81,6 +74,17 @@
 			perPaperResult: perPageData,
 			finalPrice
 		})
+	}
+
+	const saveHistory = async () => {
+		if ($totalHistoryStore < MAX_HISTORY) {
+			addHistory({
+				name: customer_name,
+				final_price: finalPrice,
+				papers: paperCount
+			})
+			$totalHistoryStore = await getTotalHistory()
+		}
 	}
 
 	const clearAll = () => {
@@ -109,7 +113,7 @@
 		paperCount.find((paper) => {
 			return !paper.length || !paper.width || !paper.thickness || !paper.rate
 		})
-
+	$: showSaveHistory = perPaperResult.size == paperCount.length
 	// Handling and maintaining focused input index
 	$: inputsArray = inputs && Array.from(inputs)
 	$: focusedInputID = $focusedInputStore && $focusedInputStore.getAttribute('id')
@@ -156,13 +160,20 @@
 				Maximum history reached, delete some history!
 			</p>
 		{/if}
-		<div class="flex w-full items-start">
+		<div class="flex w-full gap-1 items-start">
 			<input
 				bind:value={customer_name}
 				type="text"
 				placeholder="Customer name"
 				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
 			/>
+			{#if showSaveHistory}
+				<Button
+					on:click={saveHistory}
+					text="Save cost"
+					classNames="text-sm animate-pulse w-1/4 !px-1"
+				/>
+			{/if}
 		</div>
 		<div
 			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
