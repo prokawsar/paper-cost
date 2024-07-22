@@ -15,6 +15,7 @@
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { onMount, tick } from 'svelte'
+	import { slide } from 'svelte/transition'
 
 	const paperFields = {
 		id: '',
@@ -180,7 +181,10 @@
 			bind:this={inputGroupRef}
 		>
 			{#each paperCount as paper, i}
-				<div class="flex flex-row items-center justify-between rounded">
+				<div
+					class="flex flex-row items-center justify-between rounded"
+					transition:slide={{ axis: 'y', duration: 100 }}
+				>
 					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
 							disabled={paperCount.length == 1 && i == 0}
