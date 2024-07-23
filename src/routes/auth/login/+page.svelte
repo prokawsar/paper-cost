@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores'
+	import { supabase } from '$lib/db/supabaseClient'
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
+	import { redirect } from '@sveltejs/kit'
 
 	let email = ''
 	let password = ''
@@ -16,9 +18,14 @@
 		if (!otp) return
 	}
 
-	const handleLogin = () => {
+	const handleLogin = async () => {
 		if (!email || !password) return
 		console.log(email, password)
+		const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+		if (error) {
+			return
+		}
+		return redirect(300, '/')
 	}
 </script>
 

@@ -7,6 +7,7 @@
 	import Loader from '$lib/elements/Loader.svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { slide } from 'svelte/transition'
+	import { supabase } from '$lib/db/supabaseClient'
 
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
@@ -16,6 +17,10 @@
 	})
 
 	let showSettings = false
+
+	const handleLogout = async () => {
+		await supabase.auth.signOut()
+	}
 </script>
 
 <main class="h-[100svh] flex flex-col">
@@ -52,7 +57,7 @@
 				transition:slide={{ axis: 'y', duration: 200 }}
 				class="absolute right-2 bottom-7 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-100 p-2 rounded"
 			>
-				<button>Logout</button>
+				<button on:click={() => handleLogout()}>Logout</button>
 				<button>Change pin</button>
 			</div>
 		{/if}
