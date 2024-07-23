@@ -47,6 +47,8 @@
 	}
 
 	const removePaper = async (idx: string) => {
+		// const element = document.getElementById(idx)
+		// if (element) inputGroupRef.removeChild(element)
 		paperCount = paperCount.filter((field) => field.id != idx)
 		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
 		perPaperResult = perPaperResult
@@ -182,8 +184,9 @@
 		>
 			{#each paperCount as paper, i}
 				<div
+					id={paper.id}
 					class="flex flex-row items-center justify-between rounded"
-					transition:slide={{ axis: 'y', duration: 100 }}
+					transition:slide={{ axis: 'y', duration: 200 }}
 				>
 					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
