@@ -94,6 +94,7 @@
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
 		focusedIndex = 0
+		customer_name = ''
 		perPaperResult.clear()
 		getAllInputs()
 		setFocus()
@@ -168,13 +169,13 @@
 				bind:value={customer_name}
 				type="text"
 				placeholder="Customer name"
-				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
+				class="border-b border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
 			/>
 			{#if showSaveHistory}
 				<Button
 					on:click={saveHistory}
 					text="Save cost"
-					classNames="text-sm animate-pulse w-1/4 !px-1"
+					classNames="text-sm animate-pulse w-[26%] !px-1"
 				/>
 			{/if}
 		</div>
