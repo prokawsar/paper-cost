@@ -47,6 +47,8 @@
 	}
 
 	const removePaper = async (idx: string) => {
+		// const element = document.getElementById(idx)
+		// if (element) inputGroupRef.removeChild(element)
 		paperCount = paperCount.filter((field) => field.id != idx)
 		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
 		perPaperResult = perPaperResult
@@ -92,6 +94,7 @@
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
 		focusedIndex = 0
+		customer_name = ''
 		perPaperResult.clear()
 		getAllInputs()
 		setFocus()
@@ -165,14 +168,14 @@
 			<input
 				bind:value={customer_name}
 				type="text"
-				placeholder="Customer name"
-				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
+				placeholder="Product name"
+				class="border-b py-[2px] border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
 			/>
 			{#if showSaveHistory}
 				<Button
 					on:click={saveHistory}
 					text="Save cost"
-					classNames="text-sm animate-pulse w-1/4 !px-1"
+					classNames="text-sm animate-pulse !w-[30%] !px-1"
 				/>
 			{/if}
 		</div>
@@ -182,8 +185,9 @@
 		>
 			{#each paperCount as paper, i}
 				<div
+					id={paper.id}
 					class="flex flex-row items-center justify-between rounded"
-					transition:slide={{ axis: 'y', duration: 100 }}
+					transition:slide={{ axis: 'y', duration: 200 }}
 				>
 					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
