@@ -168,7 +168,7 @@
 			<input
 				bind:value={customer_name}
 				type="text"
-				placeholder="Customer name"
+				placeholder="Product name"
 				class="border-b py-[2px] border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
 			/>
 			{#if showSaveHistory}
