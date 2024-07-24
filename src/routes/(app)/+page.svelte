@@ -169,7 +169,7 @@
 				bind:value={customer_name}
 				type="text"
 				placeholder="Customer name"
-				class="border-b border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
+				class="border-b py-[2px] border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
 			/>
 			{#if showSaveHistory}
 				<Button
