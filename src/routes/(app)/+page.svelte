@@ -175,7 +175,7 @@
 				<Button
 					on:click={saveHistory}
 					text="Save cost"
-					classNames="text-sm animate-pulse w-[30%] !px-1"
+					classNames="text-sm animate-pulse !w-[30%] !px-1"
 				/>
 			{/if}
 		</div>
