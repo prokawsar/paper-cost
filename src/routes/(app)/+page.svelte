@@ -15,6 +15,7 @@
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { onMount, tick } from 'svelte'
+	import { slide } from 'svelte/transition'
 
 	const paperFields = {
 		id: '',
@@ -46,12 +47,16 @@
 	}
 
 	const removePaper = async (idx: string) => {
+		// const element = document.getElementById(idx)
+		// if (element) inputGroupRef.removeChild(element)
 		paperCount = paperCount.filter((field) => field.id != idx)
+		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
+		perPaperResult = perPaperResult
 		getAllInputs()
 	}
 
 	const calculatePaperCost = async () => {
-		if (!paperCount.length || hasNullValue) return
+		if (hasNullValue) return
 		perPaperResult.clear()
 		finalPrice = 0
 		paperCount.forEach((paper) => {
@@ -62,15 +67,6 @@
 		})
 		perPaperResult = perPaperResult
 
-		// Saving to history
-		if ($totalHistoryStore < MAX_HISTORY) {
-			addHistory({
-				name: customer_name,
-				final_price: finalPrice,
-				papers: paperCount
-			})
-			$totalHistoryStore = await getTotalHistory()
-		}
 		// mixpanel data prepare
 		const perPageData: number[] = []
 		perPaperResult.forEach((data) => {
@@ -83,10 +79,22 @@
 		})
 	}
 
+	const saveHistory = async () => {
+		if ($totalHistoryStore < MAX_HISTORY) {
+			addHistory({
+				name: customer_name,
+				final_price: finalPrice,
+				papers: paperCount
+			})
+			$totalHistoryStore = await getTotalHistory()
+		}
+	}
+
 	const clearAll = () => {
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
 		focusedIndex = 0
+		customer_name = ''
 		perPaperResult.clear()
 		getAllInputs()
 		setFocus()
@@ -109,7 +117,7 @@
 		paperCount.find((paper) => {
 			return !paper.length || !paper.width || !paper.thickness || !paper.rate
 		})
-
+	$: showSaveHistory = perPaperResult.size == paperCount.length
 	// Handling and maintaining focused input index
 	$: inputsArray = inputs && Array.from(inputs)
 	$: focusedInputID = $focusedInputStore && $focusedInputStore.getAttribute('id')
@@ -156,20 +164,31 @@
 				Maximum history reached, delete some history!
 			</p>
 		{/if}
-		<div class="flex w-full items-start">
+		<div class="flex w-full gap-1 items-start">
 			<input
 				bind:value={customer_name}
 				type="text"
-				placeholder="Customer name"
-				class="border-b border-dashed w-full px-2 focus:outline-none focus:border-teal-500"
+				placeholder="Product name"
+				class="border-b py-[2px] border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"
 			/>
+			{#if showSaveHistory}
+				<Button
+					on:click={saveHistory}
+					text="Save cost"
+					classNames="text-sm animate-pulse !w-[30%] !px-1"
+				/>
+			{/if}
 		</div>
 		<div
 			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
 			bind:this={inputGroupRef}
 		>
 			{#each paperCount as paper, i}
-				<div class="flex flex-row items-center justify-between rounded">
+				<div
+					id={paper.id}
+					class="flex flex-row items-center justify-between rounded"
+					transition:slide={{ axis: 'y', duration: 200 }}
+				>
 					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
 							disabled={paperCount.length == 1 && i == 0}
