@@ -15,6 +15,7 @@
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { onMount, tick } from 'svelte'
+	import { toast } from 'svelte-sonner'
 
 	const paperFields = {
 		id: '',
@@ -46,8 +47,6 @@
 	}
 
 	const removePaper = async (idx: string) => {
-		// const element = document.getElementById(idx)
-		// if (element) inputGroupRef.removeChild(element)
 		paperCount = paperCount.filter((field) => field.id != idx)
 		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
 		perPaperResult = perPaperResult
@@ -86,6 +85,7 @@
 				papers: paperCount
 			})
 			$totalHistoryStore = await getTotalHistory()
+			toast.success('Cost details saved successfully')
 		}
 	}
 

@@ -5,6 +5,7 @@
 	import Icon from '@iconify/svelte'
 	import days from 'dayjs'
 	import mixpanel from 'mixpanel-browser'
+	import { toast } from 'svelte-sonner'
 
 	export let data
 	let isLoading = false
@@ -19,6 +20,19 @@
 		await deleteHistory(id)
 		await invalidateAll()
 		isLoading = false
+		toast.message('History deleted successfully')
+	}
+
+	const sortedByCreatedAt = (data: any) => {
+		return data.sort((a: any, b: any) => {
+			// Convert 'created_at' strings to Date objects
+			let dateA = new Date(a.created_at)
+			let dateB = new Date(b.created_at)
+
+			if (dateA > dateB) return -1
+			if (dateA < dateB) return 1
+			return 0
+		})
 	}
 </script>
 
@@ -38,7 +52,7 @@
 		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
 				{#if data.histories.length}
-					{#each data.histories as { name, id, final_price, created_at }}
+					{#each sortedByCreatedAt(data.histories) as { name, id, final_price, created_at }}
 						<div
 							class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
 						>

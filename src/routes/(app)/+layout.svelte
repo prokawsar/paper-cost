@@ -8,6 +8,7 @@
 	import mixpanel from 'mixpanel-browser'
 	import { slide } from 'svelte/transition'
 	import { supabase } from '$lib/db/supabaseClient'
+	import { Toaster } from 'svelte-sonner'
 
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
@@ -24,6 +25,12 @@
 </script>
 
 <main class="h-[100svh] flex flex-col">
+	<Toaster
+		richColors
+		toastOptions={{
+			class: 'py-2'
+		}}
+	/>
 	{#if $navigating}
 		<div
 			class="absolute bg-white bg-opacity-80 flex h-full w-full items-center justify-center z-10"
