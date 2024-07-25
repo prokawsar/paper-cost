@@ -1,4 +1,6 @@
-export function makeid(length:number) {
+import { crossfade } from 'svelte/transition'
+
+export function makeid(length: number) {
 	let str = ''
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 	const charactersLength = characters.length
@@ -9,3 +11,19 @@ export function makeid(length:number) {
 	}
 	return str
 }
+
+export const [send, receive] = crossfade({
+	fallback(node, params) {
+		const style = getComputedStyle(node)
+		const transform = style.transform === 'none' ? '' : style.transform
+
+		return {
+			duration: 300,
+			easing: params.easing,
+			css: (t) => `
+				transform: ${transform} scale(${t});
+				opacity: ${t}
+			`
+		}
+	}
+})

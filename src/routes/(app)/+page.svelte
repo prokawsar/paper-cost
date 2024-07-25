@@ -11,11 +11,10 @@
 		MAX_PAPER,
 		type Paper
 	} from '$lib/utils/services'
-	import { makeid } from '$lib/utils/tools'
+	import { makeid, receive, send } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { onMount, tick } from 'svelte'
-	import { slide } from 'svelte/transition'
 
 	const paperFields = {
 		id: '',
@@ -180,14 +179,15 @@
 			{/if}
 		</div>
 		<div
-			class="flex flex-col gap-[1px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
+			class="flex flex-col gap-[2px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
 			bind:this={inputGroupRef}
 		>
-			{#each paperCount as paper, i}
+			{#each paperCount as paper, i (paper.id)}
 				<div
 					id={paper.id}
 					class="flex flex-row items-center justify-between rounded"
-					transition:slide={{ axis: 'y', duration: 200 }}
+					in:receive={{ key: paper.id }}
+					out:send={{ key: paper.id }}
 				>
 					<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 						<button
