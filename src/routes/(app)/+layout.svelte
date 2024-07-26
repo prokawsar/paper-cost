@@ -12,11 +12,11 @@
 	import Icon from '@iconify/svelte'
 
 	//Import Mixpanel SDK
-	// mixpanel.init(PUBLIC_MIX_TOKEN, {
-	// 	debug: false,
-	// 	track_pageview: true,
-	// 	persistence: 'localStorage'
-	// })
+	mixpanel.init(PUBLIC_MIX_TOKEN, {
+		debug: false,
+		track_pageview: true,
+		persistence: 'localStorage'
+	})
 
 	let showSettings = false
 

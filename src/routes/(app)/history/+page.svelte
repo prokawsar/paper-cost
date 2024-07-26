@@ -11,9 +11,9 @@
 	let isLoading = false
 	let deleteConfirm = ''
 
-	// mixpanel.track_pageview({
-	// 	url: '/history'
-	// })
+	mixpanel.track_pageview({
+		url: '/history'
+	})
 
 	const handleDelete = async (id: string) => {
 		isLoading = true
