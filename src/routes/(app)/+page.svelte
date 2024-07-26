@@ -39,6 +39,7 @@
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = 0
 	let customer_name = ''
+	let isSavingHistory = false
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
@@ -79,12 +80,20 @@
 
 	const saveHistory = async () => {
 		if ($totalHistoryStore < MAX_HISTORY) {
-			addHistory({
+			isSavingHistory = true
+			const response = await addHistory({
 				name: customer_name,
 				final_price: finalPrice,
 				papers: paperCount
 			})
+
+			if (response && response?.message.indexOf('TypeError') != -1) {
+				toast.error('Failed to save history, you are offline!')
+				isSavingHistory = false
+				return
+			}
 			$totalHistoryStore = await getTotalHistory()
+			isSavingHistory = false
 			toast.success('Cost details saved successfully')
 		}
 	}
@@ -172,6 +181,7 @@
 			/>
 			{#if showSaveHistory}
 				<Button
+					disabled={isSavingHistory}
 					on:click={saveHistory}
 					text="Save cost"
 					classNames="text-sm animate-pulse !w-[30%] !px-1"
