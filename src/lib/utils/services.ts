@@ -69,3 +69,13 @@ export const deleteHistory = async (id: string) => {
 	const response = await supabase.from('history').delete().eq('id', id)
 	return response
 }
+
+export const restoreHistory = async (id: string) => {
+	const response = await supabase
+		.from('history')
+		.update({
+			deleted_at: null
+		})
+		.eq('id', id)
+	return response
+}

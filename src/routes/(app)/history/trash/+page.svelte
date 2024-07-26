@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import Loader from '$lib/elements/Loader.svelte'
-	import { deleteHistory } from '$lib/utils/services.js'
+	import { deleteHistory, restoreHistory } from '$lib/utils/services.js'
 	import Icon from '@iconify/svelte'
 	import days from 'dayjs'
 	import mixpanel from 'mixpanel-browser'
@@ -20,7 +20,15 @@
 		await deleteHistory(id)
 		await invalidateAll()
 		isLoading = false
-		toast.message('History deleted successfully')
+		toast.success('History deleted successfully')
+	}
+
+	const handleRestore = async (id: string) => {
+		isLoading = true
+		await restoreHistory(id)
+		await invalidateAll()
+		isLoading = false
+		toast.message('History restored successfully')
 	}
 
 	const sortedByCreatedAt = (data: any) => {
@@ -72,20 +80,28 @@
 								<div class="flex flex-row items-center gap-[2px]">
 									<button
 										class:hidden={deleteConfirm == id}
-										class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+										class="border border-green-300 rounded text-green-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+										on:click|stopPropagation|preventDefault={() => handleRestore(id)}
+									>
+										<Icon icon="ic:round-settings-backup-restore" />
+									</button>
+
+									<button
+										class:hidden={deleteConfirm == id}
+										class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 										on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
 									>
 										<Icon icon="ph:trash-light" width="16px" />
 									</button>
 									{#if deleteConfirm == id}
 										<button
-											class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											class="border border-yellow-300 p-[3px] rounded text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 											on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
 										>
 											<Icon icon="majesticons:multiply" width="16px" />
 										</button>
 										<button
-											class="border border-green-300 p-[3px] rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											class="border border-green-300 p-[3px] rounded text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 											on:click|stopPropagation|preventDefault={() => handleDelete(id)}
 										>
 											<Icon icon="teenyicons:tick-solid" width="15px" />
