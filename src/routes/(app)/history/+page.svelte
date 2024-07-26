@@ -101,7 +101,13 @@
 					<p class="text-center text-gray-500">No history yet</p>
 				{/if}
 
-				<a href="/history/trash" class="py-1 w-full text-center border rounded">History Trash</a>
+				<a
+					href="/history/trash"
+					class="py-1 flex items-center justify-center gap-1 w-full text-center border rounded text-gray-600"
+				>
+					<Icon icon="ph:trash-light" width="16px" />
+					History Trash</a
+				>
 			{:else}
 				<div class="fixed flex h-[70%] w-[90%] items-center justify-center">
 					<Loader />
