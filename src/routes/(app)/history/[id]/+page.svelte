@@ -13,7 +13,7 @@
 	<title>History</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-4 px-4 pt-5">
 	<h1 class="text-xl text-center">Cost Details</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	{#if history}
@@ -24,13 +24,13 @@
 			</h1>
 		</div>
 
-		<div class="flex flex-col w-full justify-between gap-3 h-[90%] items-center">
+		<div class="flex flex-col w-full justify-between gap-3 h-[75%] items-center">
 			<div class="flex flex-col overflow-y-auto w-full max-w-3xl py-2">
 				{#if history.papers.length}
 					{#each history.papers as { length, width, thickness, rate, id }}
-						<div class="flex flex-col items-center w-full rounded">
+						<div class="w-full">
 							<div
-								class="flex flex-row w-full gap-1 items-center justify-between overflow-x-auto p-1"
+								class="flex flex-row w-full gap-1 items-center justify-between overflow-y-auto p-[2px]"
 							>
 								<Input bind:value={length} disabled />
 								<Input bind:value={width} disabled />
