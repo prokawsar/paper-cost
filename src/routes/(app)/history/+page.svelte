@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import Loader from '$lib/elements/Loader.svelte'
-	import { deleteHistory } from '$lib/utils/services.js'
+	import { softDeleteHistory } from '$lib/utils/services.js'
 	import Icon from '@iconify/svelte'
 	import days from 'dayjs'
 	import mixpanel from 'mixpanel-browser'
@@ -17,10 +17,10 @@
 
 	const handleDelete = async (id: string) => {
 		isLoading = true
-		await deleteHistory(id)
+		await softDeleteHistory(id)
 		await invalidateAll()
 		isLoading = false
-		toast.message('History deleted successfully')
+		toast.message('History moved to trash!')
 	}
 
 	const sortedByCreatedAt = (data: any) => {
@@ -48,56 +48,60 @@
 		</p>
 	</div>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between gap-4 h-[80%] items-center">
-		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2 z-0">
+	<div class="flex flex-col w-full justify-between gap-4 h-[82%] items-center">
+		<div class="relative flex flex-col justify-between h-full gap-3 w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
 				{#if data.histories.length}
-					{#each sortedByCreatedAt(data.histories) as { name, id, final_price, created_at }}
-						<div
-							class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
-						>
-							<a
-								href="/history/{id}"
-								class="flex flex-row items-center pl-1 justify-between w-full"
+					<div class="flex flex-col gap-2 overflow-y-auto">
+						{#each sortedByCreatedAt(data.histories) as { name, id, final_price, created_at }}
+							<div
+								class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
 							>
-								<p class:hidden={!name} class="w-fit truncate">
-									{name}
-								</p>
-								<p class="w-fit text-sm text-gray-500 truncate">
-									{days(created_at).format('DD-MM-YYYY hh:mmA')}
-								</p>
-								<p class="text-gray-500 text-sm truncate">
-									{final_price.toFixed(2)}
-								</p>
-								<div class="flex flex-row items-center gap-[2px]">
-									<button
-										class:hidden={deleteConfirm == id}
-										class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-										on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
-									>
-										<Icon icon="ph:trash-light" width="16px" />
-									</button>
-									{#if deleteConfirm == id}
+								<a
+									href="/history/{id}"
+									class="flex flex-row items-center pl-1 justify-between w-full"
+								>
+									<p class:hidden={!name} class="w-fit truncate">
+										{name}
+									</p>
+									<p class="w-fit text-sm text-gray-500 truncate">
+										{days(created_at).format('DD-MM-YYYY hh:mmA')}
+									</p>
+									<p class="text-gray-500 text-sm truncate">
+										{final_price.toFixed(2)}
+									</p>
+									<div class="flex flex-row items-center gap-[2px]">
 										<button
-											class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-											on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
+											class:hidden={deleteConfirm == id}
+											class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
 										>
-											<Icon icon="majesticons:multiply" width="16px" />
+											<Icon icon="ph:trash-light" width="16px" />
 										</button>
-										<button
-											class="border border-green-300 p-[3px] rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-											on:click|stopPropagation|preventDefault={() => handleDelete(id)}
-										>
-											<Icon icon="teenyicons:tick-solid" width="15px" />
-										</button>
-									{/if}
-								</div>
-							</a>
-						</div>
-					{/each}
+										{#if deleteConfirm == id}
+											<button
+												class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+												on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
+											>
+												<Icon icon="majesticons:multiply" width="16px" />
+											</button>
+											<button
+												class="border border-green-300 p-[3px] rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+												on:click|stopPropagation|preventDefault={() => handleDelete(id)}
+											>
+												<Icon icon="teenyicons:tick-solid" width="15px" />
+											</button>
+										{/if}
+									</div>
+								</a>
+							</div>
+						{/each}
+					</div>
 				{:else}
 					<p class="text-center text-gray-500">No history yet</p>
 				{/if}
+
+				<a href="/history/trash" class="py-1 w-full text-center border rounded">History Trash</a>
 			{:else}
 				<div class="fixed flex h-[70%] w-[90%] items-center justify-center">
 					<Loader />

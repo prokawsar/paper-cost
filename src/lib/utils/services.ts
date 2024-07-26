@@ -55,6 +55,16 @@ export const getHistory = async (id: string): Promise<CostHistoryType[] | null> 
 	return null
 }
 
+export const softDeleteHistory = async (id: string) => {
+	const response = await supabase
+		.from('history')
+		.update({
+			deleted_at: new Date()
+		})
+		.eq('id', id)
+	return response
+}
+
 export const deleteHistory = async (id: string) => {
 	const response = await supabase.from('history').delete().eq('id', id)
 	return response
