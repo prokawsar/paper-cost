@@ -3,6 +3,7 @@
 	import Result from '$lib/elements/Result.svelte'
 	import dayjs from 'dayjs'
 	import { calculateCost, type CostHistoryType } from '$lib/utils/services'
+	import Icon from '@iconify/svelte'
 
 	export let data
 
@@ -17,9 +18,14 @@
 	<h1 class="text-xl text-center">Cost Details</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 	{#if history}
-		<div class="flex flex-row justify-between px-2 items-center">
-			<p>{history.name || ''}</p>
-			<h1 class="text-sm text-center text-gray-500">
+		<div class="flex flex-row justify-between px-1 gap-2 items-center">
+			<div class="flex flex-row gap-1 justify-between flex-grow">
+				<p class="truncate max-w-44">{history.name || ''}</p>
+				<!-- <button class="border rounded p-[2px]">
+					<Icon icon="ic:outline-edit" />
+				</button> -->
+			</div>
+			<h1 class="text-sm text-center flex text-gray-500">
 				{dayjs(history.created_at).format('DD-MM-YYYY hh:mmA')}
 			</h1>
 		</div>
