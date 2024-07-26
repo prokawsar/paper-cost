@@ -73,20 +73,20 @@
 									<div class="flex flex-row items-center gap-[2px]">
 										<button
 											class:hidden={deleteConfirm == id}
-											class="border border-red-300 rounded-md text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+											class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 											on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
 										>
 											<Icon icon="ph:trash-light" width="16px" />
 										</button>
 										{#if deleteConfirm == id}
 											<button
-												class="border border-yellow-300 p-[3px] rounded-md text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+												class="border border-yellow-300 p-[3px] rounded text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 												on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
 											>
 												<Icon icon="majesticons:multiply" width="16px" />
 											</button>
 											<button
-												class="border border-green-300 p-[3px] rounded-md text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+												class="border border-green-300 p-[3px] rounded text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 												on:click|stopPropagation|preventDefault={() => handleDelete(id)}
 											>
 												<Icon icon="teenyicons:tick-solid" width="15px" />
