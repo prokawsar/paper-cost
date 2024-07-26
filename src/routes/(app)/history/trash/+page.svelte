@@ -91,7 +91,7 @@
 										class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 										on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
 									>
-										<Icon icon="ph:trash-light" width="16px" />
+										<Icon icon="ic:baseline-delete-forever" />
 									</button>
 									{#if deleteConfirm == id}
 										<button
