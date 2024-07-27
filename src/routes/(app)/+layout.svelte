@@ -27,6 +27,7 @@
 
 <main class="h-[100svh] flex flex-col justify-between">
 	<Toaster
+		duration={2000}
 		richColors
 		toastOptions={{
 			class: 'py-2 mb-8'
@@ -51,7 +52,7 @@
 
 	<!-- Footer menu section -->
 	<div
-		class="max-w-6xl mx-auto w-full flex flex-row h-11 px-3 bg-slate-50 border-t border-teal-500 items-center justify-between rounded-t-lg"
+		class="max-w-6xl mx-auto w-full flex flex-row h-11 px-5 bg-slate-50 border-t border-teal-500 items-center justify-between rounded-t-lg"
 	>
 		<!-- <p class="text-right md:text-center text-gray-400 w-3/4">
 			&#x1F4BB;Developed by <a href="https://github.com/prokawsar" target="_blank">ProKawsar</a
@@ -81,7 +82,7 @@
 	{#if showSettings}
 		<div
 			transition:slide={{ axis: 'y', duration: 200 }}
-			class="absolute w-20 right-2 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
+			class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
 		>
 			<!-- <button on:click={() => handleLogout()}>Logout</button> -->
 			<button>About</button>

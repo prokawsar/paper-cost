@@ -27,6 +27,16 @@ export const calculateCost = (paper: Paper): number => {
 	return result * parseFloat(paper.rate)
 }
 
+// export const calculateCost = (paper: Paper): number => {
+// 	const paperSize = parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)
+// 	const result: number = parseFloat(paperSize.toFixed(2)) / PAPER_FIXED
+// 	return result * parseFloat(parseFloat(paper.rate).toFixed(2))
+// }
+
+export const get40Percent = (cost: number) => {
+	return (cost * 40) / 100
+}
+
 export const addHistory = async (history: CostHistoryType) => {
 	const { data, error } = await supabase.from('history').insert({
 		name: history.name || '',

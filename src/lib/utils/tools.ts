@@ -27,3 +27,15 @@ export const [send, receive] = crossfade({
 		}
 	}
 })
+
+export const sortedByCreatedAt = (data: any) => {
+	return data.sort((a: any, b: any) => {
+		// Convert 'created_at' strings to Date objects
+		let dateA = new Date(a.created_at)
+		let dateB = new Date(b.created_at)
+
+		if (dateA > dateB) return -1
+		if (dateA < dateB) return 1
+		return 0
+	})
+}

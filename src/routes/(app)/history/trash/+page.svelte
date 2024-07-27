@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
+	import HistoryRow from '$lib/elements/HistoryRow.svelte'
 	import Loader from '$lib/elements/Loader.svelte'
 	import { deleteHistory, restoreHistory } from '$lib/utils/services.js'
-	import Icon from '@iconify/svelte'
-	import days from 'dayjs'
+	import { sortedByCreatedAt } from '$lib/utils/tools.js'
 	import mixpanel from 'mixpanel-browser'
 	import { toast } from 'svelte-sonner'
 
 	export let data
 	let isLoading = false
-	let deleteConfirm = ''
 
 	mixpanel.track_pageview({
 		url: '/history/trash'
@@ -28,19 +27,7 @@
 		await restoreHistory(id)
 		await invalidateAll()
 		isLoading = false
-		toast.message('History restored successfully')
-	}
-
-	const sortedByCreatedAt = (data: any) => {
-		return data.sort((a: any, b: any) => {
-			// Convert 'created_at' strings to Date objects
-			let dateA = new Date(a.created_at)
-			let dateB = new Date(b.created_at)
-
-			if (dateA > dateB) return -1
-			if (dateA < dateB) return 1
-			return 0
-		})
+		toast.success('History restored successfully')
 	}
 </script>
 
@@ -60,56 +47,13 @@
 		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
 				{#if data.histories.length}
-					{#each sortedByCreatedAt(data.histories) as { name, id, final_price, created_at }}
-						<div
-							class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm"
-						>
-							<a
-								href="/history/{id}"
-								class="flex flex-row items-center pl-1 justify-between w-full"
-							>
-								<p class:hidden={!name} class="w-fit truncate">
-									{name}
-								</p>
-								<p class="w-fit text-sm text-gray-500 truncate">
-									{days(created_at).format('DD-MM-YYYY hh:mmA')}
-								</p>
-								<p class="text-gray-500 text-sm truncate">
-									{final_price.toFixed(2)}
-								</p>
-								<div class="flex flex-row items-center gap-[2px]">
-									<button
-										class:hidden={deleteConfirm == id}
-										class="border border-green-300 rounded text-green-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-										on:click|stopPropagation|preventDefault={() => handleRestore(id)}
-									>
-										<Icon icon="ic:round-settings-backup-restore" />
-									</button>
-
-									<button
-										class:hidden={deleteConfirm == id}
-										class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-										on:click|stopPropagation|preventDefault={() => (deleteConfirm = id)}
-									>
-										<Icon icon="ic:baseline-delete-forever" />
-									</button>
-									{#if deleteConfirm == id}
-										<button
-											class="border border-yellow-300 p-[3px] rounded text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-											on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
-										>
-											<Icon icon="majesticons:multiply" width="16px" />
-										</button>
-										<button
-											class="border border-green-300 p-[3px] rounded text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-											on:click|stopPropagation|preventDefault={() => handleDelete(id)}
-										>
-											<Icon icon="teenyicons:tick-solid" width="15px" />
-										</button>
-									{/if}
-								</div>
-							</a>
-						</div>
+					{#each sortedByCreatedAt(data.histories) as cost}
+						<HistoryRow
+							isTrash
+							{cost}
+							on:restore={(e) => handleRestore(e.detail)}
+							on:delete={(e) => handleDelete(e.detail)}
+						/>
 					{/each}
 				{:else}
 					<p class="text-center text-gray-500">Trash is empty</p>
