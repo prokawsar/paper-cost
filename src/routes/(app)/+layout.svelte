@@ -10,6 +10,9 @@
 	import { supabase } from '$lib/db/supabaseClient'
 	import { Toaster } from 'svelte-sonner'
 	import Icon from '@iconify/svelte'
+	import Modal from '$lib/elements/Modal.svelte'
+	import BrandTitle from '$lib/elements/BrandTitle.svelte'
+	import About from '$lib/elements/About.svelte'
 
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
@@ -19,6 +22,7 @@
 	})
 
 	let showSettings = false
+	let showAbout = false
 
 	const handleLogout = async () => {
 		await supabase.auth.signOut()
@@ -40,10 +44,15 @@
 			<Loader />
 		</div>
 	{/if}
+	{#if showAbout}
+		<Modal bind:show={showAbout}>
+			<About />
+		</Modal>
+	{/if}
 	<div class="flex flex-col h-[92%]">
 		<nav class="max-w-6xl mx-auto w-full">
 			<div class="flex justify-center py-2">
-				<p class="text-center text-2xl text-red-600 font-semibold">Molla Printing & Packaging</p>
+				<BrandTitle />
 			</div>
 			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]" />
 		</nav>
@@ -85,7 +94,11 @@
 			class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
 		>
 			<!-- <button on:click={() => handleLogout()}>Logout</button> -->
-			<button>About</button>
+			<button
+				on:click={() => {
+					;(showAbout = true), (showSettings = false)
+				}}>About</button
+			>
 		</div>
 	{/if}
 </main>

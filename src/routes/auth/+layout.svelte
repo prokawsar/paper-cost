@@ -2,6 +2,7 @@
 	import { page } from '$app/stores'
 	import { PUBLIC_MIX_TOKEN } from '$env/static/public'
 	import '$lib/app.css'
+	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import '@fontsource/jost'
 
 	//Import Mixpanel SDK
@@ -16,7 +17,7 @@
 <main class="h-[100svh] flex flex-col">
 	<nav>
 		<div class="flex justify-center py-2">
-			<p class="text-center text-2xl text-red-600 font-semibold">Molla Printing & Packaging</p>
+			<BrandTitle />
 		</div>
 		<div
 			class="w-full max-w-6xl mx-auto bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]"
