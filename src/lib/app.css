@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .brand-name {
-	background-image: url('./giphy.gif');
+	background-image: url('$lib/images/giphy.gif');
 	background-position: top;
 	background-clip: text;
 	-webkit-background-clip: text;
