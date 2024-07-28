@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.brand-name {
+	background-image: url('./giphy.gif');
+	background-position: top;
+	background-clip: text;
+	-webkit-background-clip: text;
+}

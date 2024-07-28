@@ -18,7 +18,7 @@ export const [send, receive] = crossfade({
 		const transform = style.transform === 'none' ? '' : style.transform
 
 		return {
-			duration: 300,
+			duration: params.duration,
 			easing: params.easing,
 			css: (t) => `
 				transform: ${transform} scale(${t});
