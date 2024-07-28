@@ -44,7 +44,8 @@
 	{/if}
 	{#if showAbout}
 		<Modal bind:show={showAbout}>
-			<div class="flex flex-col text-center">
+			<div class="flex flex-col text-center items-center">
+				<img class="h-10 w-10 rounded-full" src="/logo.jpeg" alt="logo" />
 				<p class="text-lg font-bold">Paper Cost</p>
 
 				<p class="mt-5">Developer</p>
