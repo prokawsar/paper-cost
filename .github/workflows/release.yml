@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - modal
 
 jobs:
   release-on-push:
