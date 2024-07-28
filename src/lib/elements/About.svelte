@@ -6,7 +6,7 @@
 	<div class="text-sm flex flex-col">
 		<p>Sheba Queue</p>
 		<p>Kawsar Ahmed</p>
-		<p>+880 1915983757</p>
+		<p class="text-[13px]">+880 1915983757</p>
 	</div>
-	<p class="mt-10 text-slate-500 text-xs">Version: 1.0.0</p>
+	<p class="mt-10 text-slate-500 text-xs">Version: 1.0.1</p>
 </div>
