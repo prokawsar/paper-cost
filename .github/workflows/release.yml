@@ -1,7 +1,6 @@
 on:
-  push:
-    branches:
-      - modal
+  pull_request:
+    branches: ['master']
 
 jobs:
   create-release-on-push:
@@ -17,3 +16,4 @@ jobs:
           bump_version_scheme: minor
           tag_prefix: 'v'
           release_name: 'Release <RELEASE_VERSION>'
+          max_commits: 20
