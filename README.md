@@ -1,6 +1,5 @@
 # Determine Paper Cost
 
-
 ## Tech Stack
 
 ```bash
@@ -13,6 +12,7 @@
 Tools
 
 ```bash
+
 ```
 
 ## After Cloning this project
