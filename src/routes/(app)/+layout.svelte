@@ -11,6 +11,8 @@
 	import { Toaster } from 'svelte-sonner'
 	import Icon from '@iconify/svelte'
 	import Modal from '$lib/elements/Modal.svelte'
+	import BrandTitle from '$lib/elements/BrandTitle.svelte'
+	import About from '$lib/elements/About.svelte'
 
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
@@ -44,24 +46,13 @@
 	{/if}
 	{#if showAbout}
 		<Modal bind:show={showAbout}>
-			<div class="flex flex-col text-center items-center">
-				<img class="h-10 w-10 rounded-full" src="/logo.jpeg" alt="logo" />
-				<p class="text-lg font-bold">Paper Cost</p>
-
-				<p class="mt-5">Developer</p>
-				<div class="text-sm flex flex-col">
-					<p>Sheba Queue</p>
-					<p>Kawsar Ahmed</p>
-					<p>+880 1915983757</p>
-				</div>
-				<p class="mt-10 text-slate-500">Version: 1.0.0</p>
-			</div>
+			<About />
 		</Modal>
 	{/if}
 	<div class="flex flex-col h-[92%]">
 		<nav class="max-w-6xl mx-auto w-full">
 			<div class="flex justify-center py-2">
-				<p class="text-center text-2xl text-red-600 font-semibold">Molla Printing & Packaging</p>
+				<BrandTitle />
 			</div>
 			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]" />
 		</nav>
