@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+	overscroll-behavior: contain;
+}
+
 .brand-name {
 	background-image: url('$lib/images/giphy.gif');
 	background-position: top;

@@ -24,8 +24,10 @@
 	let showSettings = false
 	let showAbout = false
 
-	const handleLogout = async () => {
-		await supabase.auth.signOut()
+	const hideSettings = () => (showSettings = false)
+
+	const refresh = async () => {
+		window.location.reload()
 	}
 </script>
 
@@ -63,10 +65,6 @@
 	<div
 		class="max-w-6xl mx-auto w-full flex flex-row h-11 px-5 bg-slate-50 border-t border-teal-500 items-center justify-between rounded-t-lg"
 	>
-		<!-- <p class="text-right md:text-center text-gray-400 w-3/4">
-			&#x1F4BB;Developed by <a href="https://github.com/prokawsar" target="_blank">ProKawsar</a
-			>&#x1F60E;
-		</p> -->
 		<a
 			href="/"
 			class="flex flex-row items-center gap-1"
@@ -75,6 +73,7 @@
 			<Icon icon="clarity:home-line" /> Home
 		</a>
 		<a
+			data-sveltekit-preload-data="tap"
 			href="/history"
 			class="flex flex-row items-center gap-1"
 			class:text-orange-500={$page.url.pathname == '/history'}
@@ -93,11 +92,17 @@
 			transition:slide={{ axis: 'y', duration: 200 }}
 			class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
 		>
-			<!-- <button on:click={() => handleLogout()}>Logout</button> -->
 			<button
 				on:click={() => {
-					;(showAbout = true), (showSettings = false)
+					hideSettings()
+					showAbout = true
 				}}>About</button
+			>
+			<button
+				on:click={() => {
+					hideSettings()
+					refresh()
+				}}>Refresh</button
 			>
 		</div>
 	{/if}
