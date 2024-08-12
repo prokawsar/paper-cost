@@ -29,7 +29,9 @@
 		paperCount = paperCount.filter((field) => field.id != idx)
 		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
 		perPaperResult = perPaperResult
-		getAllInputs()
+		setTimeout(() => {
+			getAllInputs()
+		}, 300)
 	}
 
 	const calculatePaperCost = async () => {
@@ -131,7 +133,7 @@
 	}
 
 	onMount(async () => {
-		inputs = inputGroupRef.querySelectorAll('input')
+		await getAllInputs()
 		setFocus()
 		$totalHistoryStore = await getTotalHistory()
 	})

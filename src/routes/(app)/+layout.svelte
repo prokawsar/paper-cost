@@ -7,7 +7,6 @@
 	import Loader from '$lib/elements/Loader.svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { slide } from 'svelte/transition'
-	import { supabase } from '$lib/db/supabaseClient'
 	import { Toaster } from 'svelte-sonner'
 	import Icon from '@iconify/svelte'
 	import Modal from '$lib/elements/Modal.svelte'

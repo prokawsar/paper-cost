@@ -17,8 +17,8 @@
 <div
 	id={paper.id}
 	class="flex flex-row items-center justify-between rounded"
-	in:receive={{ key: paper.id }}
-	out:send={{ key: paper.id }}
+	in:receive={{ key: paper.id, duration: 250 }}
+	out:send={{ key: paper.id, duration: 250 }}
 >
 	<div class="flex flex-row gap-[3px] items-center overflow-x-auto">
 		<button
