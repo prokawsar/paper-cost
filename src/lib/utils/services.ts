@@ -1,4 +1,5 @@
 import { supabase } from '$lib/db/supabaseClient'
+import { PAPER_FIXED } from './constants'
 
 export type Paper = {
 	id: string
@@ -16,10 +17,6 @@ export type CostHistoryType = {
 	final_price: number
 	created_at?: string
 }
-
-export const PAPER_FIXED = 1550000
-export const MAX_PAPER = 10
-export const MAX_HISTORY = 20
 
 export const calculateCost = (paper: Paper): number => {
 	const paperSize = parseFloat(paper.length) * parseFloat(paper.width) * parseFloat(paper.thickness)

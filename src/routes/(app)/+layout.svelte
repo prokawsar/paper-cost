@@ -32,13 +32,6 @@
 </script>
 
 <main class="h-[100svh] flex flex-col justify-between">
-	<Toaster
-		duration={2000}
-		richColors
-		toastOptions={{
-			class: 'py-2 mb-8'
-		}}
-	/>
 	{#if $navigating}
 		<div
 			class="absolute bg-white bg-opacity-80 flex h-full w-full items-center justify-center z-10"
@@ -60,6 +53,14 @@
 		</nav>
 		<slot />
 	</div>
+
+	<Toaster
+		duration={2000}
+		richColors
+		toastOptions={{
+			class: 'py-2 mb-8'
+		}}
+	/>
 
 	<!-- Footer menu section -->
 	<div

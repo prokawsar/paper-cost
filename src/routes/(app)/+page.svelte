@@ -1,36 +1,14 @@
 <script lang="ts">
 	import Button from '$lib/elements/Button.svelte'
-	import Input from '$lib/elements/Input.svelte'
+	import PaperItem from '$lib/elements/PaperItem.svelte'
 	import Result from '$lib/elements/Result.svelte'
 	import { focusedInputStore, totalHistoryStore } from '$lib/stores'
-	import {
-		addHistory,
-		calculateCost,
-		getTotalHistory,
-		MAX_HISTORY,
-		MAX_PAPER,
-		type Paper
-	} from '$lib/utils/services'
-	import { makeid, receive, send } from '$lib/utils/tools'
-	import Icon from '@iconify/svelte'
+	import { MAX_HISTORY, MAX_PAPER, paperFields } from '$lib/utils/constants'
+	import { addHistory, calculateCost, getTotalHistory, type Paper } from '$lib/utils/services'
+	import { makeid } from '$lib/utils/tools'
 	import mixpanel from 'mixpanel-browser'
 	import { onMount, tick } from 'svelte'
 	import { toast } from 'svelte-sonner'
-
-	const paperFields = {
-		id: '',
-		length: '',
-		width: '',
-		thickness: '',
-		rate: ''
-	}
-	const placeholders: { [key: string]: string } = {
-		length: 'L',
-		width: 'W',
-		thickness: 'GSM',
-		rate: 'R'
-	}
-	const fields = Object.keys(paperFields).filter((key) => key !== 'id')
 
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
@@ -192,8 +170,16 @@
 			class="flex flex-col gap-[2px] overflow-y-auto max-w-3xl max-h-[85%] py-2 w-full"
 			bind:this={inputGroupRef}
 		>
-			{#each paperCount as paper, i (paper.id)}
-				<div
+			{#each paperCount as paper, index (paper.id)}
+				<PaperItem
+					{index}
+					bind:paper
+					{perPaperResult}
+					totalPaper={paperCount.length}
+					on:keydown={(event) => handleKeyDown(event)}
+					on:remove={() => removePaper(paper.id)}
+				/>
+				<!-- <div
 					id={paper.id}
 					class="flex flex-row items-center justify-between rounded"
 					in:receive={{ key: paper.id }}
@@ -224,7 +210,7 @@
 							= {perPaperResult.get(paper.id)?.toFixed(2) || 'total'}
 						</p>
 					</div>
-				</div>
+				</div> -->
 			{/each}
 		</div>
 
