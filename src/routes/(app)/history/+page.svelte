@@ -3,6 +3,7 @@
 	import HistoryRow from '$lib/elements/HistoryRow.svelte'
 	import Loader from '$lib/elements/Loader.svelte'
 	import { softDeleteHistory } from '$lib/utils/services.js'
+	import { sortedByCreatedAt } from '$lib/utils/tools.js'
 	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { toast } from 'svelte-sonner'
@@ -20,18 +21,6 @@
 		await invalidateAll()
 		isLoading = false
 		toast.message('History moved to trash!')
-	}
-
-	const sortedByCreatedAt = (data: any) => {
-		return data.sort((a: any, b: any) => {
-			// Convert 'created_at' strings to Date objects
-			let dateA = new Date(a.created_at)
-			let dateB = new Date(b.created_at)
-
-			if (dateA > dateB) return -1
-			if (dateA < dateB) return 1
-			return 0
-		})
 	}
 </script>
 
