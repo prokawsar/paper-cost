@@ -20,6 +20,8 @@
 		persistence: 'localStorage'
 	})
 
+	if (PUBLIC_MIX_TOKEN == 'dev') mixpanel.disable()
+
 	let showSettings = false
 	let showAbout = false
 
