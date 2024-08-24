@@ -103,6 +103,11 @@
 			<button
 				on:click={() => {
 					hideSettings()
+				}}>Logout</button
+			>
+			<button
+				on:click={() => {
+					hideSettings()
 					refresh()
 				}}>Refresh</button
 			>
