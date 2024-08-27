@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import HistoryRow from '$lib/elements/HistoryRow.svelte'
-	import Loader from '$lib/elements/Loader.svelte'
+	import InPageLoader from '$lib/elements/InPageLoader.svelte'
 	import { softDeleteHistory } from '$lib/utils/services.js'
 	import { sortedByCreatedAt } from '$lib/utils/tools.js'
 	import Icon from '@iconify/svelte'
@@ -57,9 +57,7 @@
 					History Trash</a
 				>
 			{:else}
-				<div class="fixed flex h-[70%] w-[90%] items-center justify-center">
-					<Loader />
-				</div>
+				<InPageLoader />
 			{/if}
 		</div>
 	</div>

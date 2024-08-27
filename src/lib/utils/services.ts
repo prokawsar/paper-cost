@@ -77,6 +77,11 @@ export const deleteHistory = async (id: string) => {
 	return response
 }
 
+export const emptyTrashData = async () => {
+	const response = await supabase.from('history').delete().not('deleted_at', 'is', null)
+	return response
+}
+
 export const restoreHistory = async (id: string) => {
 	const response = await supabase
 		.from('history')
