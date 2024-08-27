@@ -29,7 +29,7 @@
 			<Icon icon="ph:trash-light" width="16px" />
 		</button>
 		{#each fields as field}
-			<Input bind:value={paper[field]} placeholder={placeholders[field]} on:keydown />
+			<Input name={field} bind:value={paper[field]} placeholder={placeholders[field]} on:keydown />
 		{/each}
 	</div>
 	<div class="flex flex-grow justify-center px-1">

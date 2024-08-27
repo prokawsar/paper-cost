@@ -5,6 +5,7 @@
 
 	export let id: string = makeid(3)
 	export let value: string
+	export let name: string = ''
 	export let type: string = 'number'
 	export let disabled: boolean = false
 	export let classNames: string = ''
@@ -19,6 +20,7 @@
 </script>
 
 <input
+	data-testid={name}
 	bind:this={inputRef}
 	{id}
 	{disabled}
