@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import HistoryRow from '$lib/elements/HistoryRow.svelte'
-	import Loader from '$lib/elements/Loader.svelte'
-	import { deleteHistory, restoreHistory } from '$lib/utils/services.js'
+	import InPageLoader from '$lib/elements/InPageLoader.svelte'
+	import { deleteHistory, emptyTrashData, restoreHistory } from '$lib/utils/services.js'
 	import { sortedByCreatedAt } from '$lib/utils/tools.js'
+	import Icon from '@iconify/svelte'
 	import mixpanel from 'mixpanel-browser'
 	import { toast } from 'svelte-sonner'
 
@@ -29,6 +30,14 @@
 		isLoading = false
 		toast.success('History restored successfully')
 	}
+
+	const handleEmptyTrash = async () => {
+		isLoading = true
+		await emptyTrashData()
+		await invalidateAll()
+		isLoading = false
+		toast.success('Great! Your trash is empty')
+	}
 </script>
 
 <svelte:head>
@@ -43,8 +52,10 @@
 		</p>
 	</div>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
-	<div class="flex flex-col w-full justify-between gap-4 h-[80%] items-center">
-		<div class="relative flex flex-col h-full gap-2 overflow-y-auto w-full max-w-3xl py-2 z-0">
+	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
+		<div
+			class="relative flex flex-col h-full gap-2 justify-between overflow-y-auto w-full max-w-3xl py-2 z-0"
+		>
 			{#if !isLoading}
 				{#if data.histories.length}
 					{#each sortedByCreatedAt(data.histories) as cost}
@@ -58,10 +69,16 @@
 				{:else}
 					<p class="text-center text-gray-500">Trash is empty</p>
 				{/if}
+
+				<button
+					on:click={handleEmptyTrash}
+					class="py-1 text-red-500 flex items-center justify-center gap-1 w-full text-center border rounded"
+				>
+					<Icon icon="ph:trash-light" width="16px" />
+					Empty Trash</button
+				>
 			{:else}
-				<div class="fixed flex h-[70%] w-[90%] items-center justify-center">
-					<Loader />
-				</div>
+				<InPageLoader />
 			{/if}
 		</div>
 	</div>

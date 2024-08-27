@@ -56,6 +56,7 @@
 	</div>
 
 	<Toaster
+		closeButton
 		duration={2000}
 		richColors
 		toastOptions={{
