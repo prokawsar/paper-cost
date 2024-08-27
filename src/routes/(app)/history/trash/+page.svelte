@@ -58,14 +58,16 @@
 		>
 			{#if !isLoading}
 				{#if data.histories.length}
-					{#each sortedByCreatedAt(data.histories) as cost}
-						<HistoryRow
-							isTrash
-							{cost}
-							on:restore={(e) => handleRestore(e.detail)}
-							on:delete={(e) => handleDelete(e.detail)}
-						/>
-					{/each}
+					<div class="flex flex-col gap-2 overflow-y-auto">
+						{#each sortedByCreatedAt(data.histories) as cost}
+							<HistoryRow
+								isTrash
+								{cost}
+								on:restore={(e) => handleRestore(e.detail)}
+								on:delete={(e) => handleDelete(e.detail)}
+							/>
+						{/each}
+					</div>
 				{:else}
 					<p class="text-center text-gray-500">Trash is empty</p>
 				{/if}
