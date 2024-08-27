@@ -1,9 +1,13 @@
+name: App release
+
 on:
-  pull_request:
+  pull_request_target:
     branches: ['master']
 
 jobs:
-  create-release-on-push:
+  if_merged:
+    if: ${{ github.event.pull_request.merged }}
+
     runs-on: ubuntu-latest
     permissions:
       contents: write
