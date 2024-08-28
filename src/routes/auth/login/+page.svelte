@@ -27,27 +27,25 @@
 		}
 		return redirect(300, '/')
 	}
+
+	const handleOAuthLogin = async () => {
+		const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' })
+		if (error) {
+			return
+		}
+		return redirect(300, '/')
+	}
 </script>
 
 <svelte:head>
 	<title>Login</title>
 </svelte:head>
 
-<section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-4 px-4 py-5">
+<section class="max-w-6xl mx-auto flex items-center w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-xl text-center">Login</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 
-	<form class="flex w-full flex-col gap-3 items-center">
-		<!-- {#if isOtpSent}
-			<Input
-				required
-				type="text"
-				bind:value={otp}
-				classNames="!w-full text-center"
-				placeholder="******"
-			/>
-			<Button type="submit" text="Login with OTP" on:click={verifyOTP} />
-		{:else} -->
+	<!-- <form class="flex w-full flex-col gap-3 items-center">
 		<Input
 			required
 			type="email"
@@ -63,8 +61,8 @@
 			placeholder="*******"
 		/>
 		<Button type="submit" text="Login" on:click={handleLogin} />
-		<!-- {/if} -->
-	</form>
+	</form> -->
+	<Button type="button" text="Login with Google" on:click={handleOAuthLogin} />
 
 	<p class="text-center text-slate-500 mt-10">
 		Forget password? Need a new account? <br />
