@@ -12,6 +12,9 @@
 	import Modal from '$lib/elements/Modal.svelte'
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import About from '$lib/elements/About.svelte'
+	import { onMount } from 'svelte'
+	// import { supabase } from '$lib/db/supabaseClient'
+	import { invalidate, invalidateAll } from '$app/navigation'
 
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
@@ -29,6 +32,23 @@
 
 	const refresh = async () => {
 		window.location.reload()
+	}
+	export let data
+	$: ({ session, supabase } = data)
+	console.log(session)
+
+	onMount(() => {
+		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+			if (newSession?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth')
+			}
+		})
+
+		return () => data.subscription.unsubscribe()
+	})
+
+	const logOut = async () => {
+		await supabase.auth.signOut()
 	}
 </script>
 
@@ -109,6 +129,7 @@
 				<button
 					on:click={() => {
 						hideSettings()
+						logOut()
 					}}>Logout</button
 				>
 			</div>
