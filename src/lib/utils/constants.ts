@@ -16,3 +16,5 @@ export const placeholders: { [key: string]: string } = {
 	rate: 'R'
 }
 export const fields = Object.keys(paperFields).filter((key) => key !== 'id')
+
+export const PROTECTED_ROUTES = ['/', '/history', '/history/trash', '/history/']

@@ -1,4 +1,4 @@
-import type { LayoutServerLoad } from './$types'
+import type { LayoutServerLoad } from '../(app)/$types'
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
 	return {

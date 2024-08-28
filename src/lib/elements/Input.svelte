@@ -23,6 +23,7 @@
 	data-testid={name}
 	bind:this={inputRef}
 	{id}
+	{name}
 	{disabled}
 	class="input-field focus:!border-[1.5px] focus:!border-teal-500 focus:outline-none {classNames}"
 	bind:value

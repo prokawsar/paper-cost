@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { supabase } from '$lib/db/supabaseClient'
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import { redirect } from '@sveltejs/kit'
@@ -10,6 +9,9 @@
 	let otp = ''
 	let isOtpSent = false
 
+	export let data
+	$: ({ supabase } = data)
+
 	const handleSendOTP = () => {
 		if (!email) return
 		isOtpSent = true
@@ -18,29 +20,19 @@
 		if (!otp) return
 	}
 
-	const handleLogin = async () => {
-		if (!email || !password) return
-		console.log(email, password)
-		const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-		if (error) {
-			return
-		}
-		return redirect(300, '/')
-	}
-
 	const handleOAuthLogin = async () => {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: `http://localhost:2000/auth/callback`
+				redirectTo: `http://localhost:2000/auth/callback/`
 			}
 		})
-		console.log(data, error)
 
 		if (error) {
 			return
 		}
-		return redirect(300, '/')
+
+		return redirect(300, data.url)
 	}
 </script>
 
@@ -52,10 +44,11 @@
 	<h1 class="text-xl text-center">Login</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
 
-	<!-- <form class="flex w-full flex-col gap-3 items-center">
+	<form method="post" action="?/login" class="flex w-full flex-col gap-3 items-center">
 		<Input
 			required
 			type="email"
+			name="email"
 			bind:value={email}
 			classNames="!w-full text-center"
 			placeholder="Type your email"
@@ -63,13 +56,14 @@
 		<Input
 			required
 			type="password"
+			name="password"
 			bind:value={password}
 			classNames="!w-full text-center font-bold"
 			placeholder="*******"
 		/>
-		<Button type="submit" text="Login" on:click={handleLogin} />
-	</form> -->
-	<Button type="button" text="Login with Google" on:click={handleOAuthLogin} />
+		<Button type="submit" text="Login" />
+	</form>
+	<!-- <Button type="button" text="Login with Google" on:click={handleOAuthLogin} /> -->
 
 	<p class="text-center text-slate-500 mt-10">
 		Forget password? Need a new account? <br />

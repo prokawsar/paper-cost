@@ -6,11 +6,9 @@ export const GET: RequestHandler = async (event) => {
 		url,
 		locals: { supabase }
 	} = event
+	// const code = url.searchParams.get('access_token') as string
 	const code = url.searchParams.get('code') as string
 	const next = url.searchParams.get('next') ?? '/'
-	for (const i in url.searchParams.values()) {
-		console.log(i)
-	}
 
 	if (code) {
 		const { error } = await supabase.auth.exchangeCodeForSession(code)
@@ -20,5 +18,5 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// return the user to an error page with instructions
-	throw redirect(303, '/auth/auth-code-error')
+	throw redirect(303, '/auth/error')
 }
