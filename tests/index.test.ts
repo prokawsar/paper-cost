@@ -1,12 +1,14 @@
 import { expect, test } from '@playwright/test'
+import { login } from './utils'
 
-test('index page has loaded fine', async ({ page }) => {
+test('index page not loaded without login', async ({ page }) => {
 	await page.goto('/')
-	await expect(page.getByText('Paper Cost')).toBeVisible()
+	await expect(page.getByText('Paper Cost')).not.toBeVisible()
 })
 
-test('test calculate paper cost works', async ({ page }) => {
-	await page.goto('/')
+test('calculate paper cost works', async ({ page }) => {
+	await login(page)
+	// await page.goto('/')
 
 	await page.getByPlaceholder('Product name').click()
 	await page.getByPlaceholder('Product name').fill('Test product')
@@ -22,8 +24,10 @@ test('test calculate paper cost works', async ({ page }) => {
 	await expect(page.getByText('= total')).toBeVisible()
 })
 
-test('test cost history saved in history', async ({ page }) => {
-	await page.goto('/')
+test('cost details saved in history', async ({ page }) => {
+	await login(page)
+
+	// await page.goto('/')
 	await page.getByPlaceholder('L').fill('34')
 	await page.getByPlaceholder('L').press('Enter')
 	await page.getByPlaceholder('W').fill('34')
@@ -40,8 +44,10 @@ test('test cost history saved in history', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'History' })).toBeVisible()
 })
 
-test('test multiple paper calcuation', async ({ page }) => {
-	await page.goto('/')
+test('multiple paper calcuation', async ({ page }) => {
+	await login(page)
+
+	// await page.goto('/')
 
 	await page.getByTestId('product_name').click()
 	await page.getByTestId('product_name').fill('Snaks')
