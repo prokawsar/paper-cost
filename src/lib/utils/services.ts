@@ -47,7 +47,10 @@ export const addHistory = async (history: CostHistoryType) => {
 }
 
 export const getTotalHistory = async (): Promise<number> => {
-	const { count } = await await supabase.from('history').select('*', { count: 'exact' })
+	const { count } = await await supabase
+		.from('history')
+		.select('*', { count: 'exact' })
+		.is('deleted_at', null)
 	if (count) {
 		return count
 	}
