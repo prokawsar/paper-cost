@@ -13,6 +13,8 @@
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import About from '$lib/elements/About.svelte'
 
+	export let data
+
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
 		debug: false,
@@ -38,7 +40,7 @@
 	{/if}
 	{#if showAbout}
 		<Modal bind:show={showAbout}>
-			<About />
+			<About user={data.user} />
 		</Modal>
 	{/if}
 	<div class="flex flex-col h-[92%]">
