@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import { redirect } from '@sveltejs/kit'
+
+	export let data
+	export let form
+	$: ({ supabase } = data)
 
 	let email = ''
 	let password = ''
 	let otp = ''
 	let isOtpSent = false
-
-	export let data
-	$: ({ supabase } = data)
 
 	const handleSendOTP = () => {
 		if (!email) return
@@ -43,6 +43,12 @@
 <section class="max-w-6xl mx-auto flex items-center w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-xl text-center">Login</h1>
 	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<p
+		class:hidden={!form?.message}
+		class="text-sm text-red-500 border border-red-200 rounded-sm px-1"
+	>
+		{form?.message ? form?.message : ''}
+	</p>
 
 	<form method="post" action="?/login" class="flex w-full flex-col gap-3 items-center">
 		<Input
