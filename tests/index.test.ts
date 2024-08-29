@@ -36,12 +36,16 @@ test('cost details saved in history', async ({ page }) => {
 	await page.getByPlaceholder('GSM').press('Enter')
 	await page.getByPlaceholder('R', { exact: true }).fill('100')
 	await page.getByPlaceholder('R', { exact: true }).press('Enter')
+	await page.waitForTimeout(100)
+
 	await expect(page.getByText('Total with (40%):')).toBeVisible()
 	await expect(page.getByText('3.55')).toBeVisible()
 	await page.getByRole('button', { name: 'Save cost' }).click()
 	await expect(page.getByText('Cost details saved')).toBeVisible()
 	await page.getByRole('link', { name: 'Cost History' }).click()
-	await expect(page.getByRole('heading', { name: 'History' })).toBeVisible()
+
+	const costWith40 = page.getByTestId('cost-with-40').first()
+	await expect(await costWith40.textContent()).toEqual('(3.55)')
 })
 
 test('multiple paper calcuation', async ({ page }) => {
