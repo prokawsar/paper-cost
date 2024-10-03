@@ -9,16 +9,6 @@
 
 	let email = ''
 	let password = ''
-	let otp = ''
-	let isOtpSent = false
-
-	const handleSendOTP = () => {
-		if (!email) return
-		isOtpSent = true
-	}
-	const verifyOTP = () => {
-		if (!otp) return
-	}
 
 	const handleOAuthLogin = async () => {
 		const { data, error } = await supabase.auth.signInWithOAuth({
