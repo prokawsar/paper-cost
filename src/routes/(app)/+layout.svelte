@@ -12,6 +12,8 @@
 	import Modal from '$lib/elements/Modal.svelte'
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import About from '$lib/elements/About.svelte'
+	import { enhance } from '$app/forms'
+	import FullPageLoader from '$lib/elements/FullPageLoader.svelte'
 
 	export let data
 
@@ -26,17 +28,14 @@
 
 	let showSettings = false
 	let showAbout = false
+	let loading = false
 
 	const hideSettings = () => (showSettings = false)
 </script>
 
 <main class="h-[100svh] flex flex-col justify-between">
-	{#if $navigating}
-		<div
-			class="absolute bg-white bg-opacity-80 flex h-full w-full items-center justify-center z-10"
-		>
-			<Loader />
-		</div>
+	{#if $navigating || loading}
+		<FullPageLoader />
 	{/if}
 	{#if showAbout}
 		<Modal bind:show={showAbout}>
@@ -98,7 +97,17 @@
 						showAbout = true
 					}}>About</button
 				>
-				<form method="post" action="/?/logout">
+				<form
+					method="post"
+					action="/?/logout"
+					use:enhance={() => {
+						loading = true
+						return async ({ update }) => {
+							await update()
+							loading = false
+						}
+					}}
+				>
 					<button
 						type="submit"
 						on:click={() => {
