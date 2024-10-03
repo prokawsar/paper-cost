@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { type Handle, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 import { PUBLIC_SUPABASE_ANON, PUBLIC_SUPABASE_URL } from '$env/static/public'
-import { PROTECTED_ROUTES } from '$lib/utils/constants'
+import { PROTECTED_ROUTES, PROTECTED_ROUTE_PATTERNS, PUBLIC_ROUTES } from '$lib/utils/constants'
 
 const supabase: Handle = async ({ event, resolve }) => {
 	/**
@@ -49,11 +49,14 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	const { user } = await event.locals.safeGetSession()
 	event.locals.user = user
 
-	if (!event.locals.user && PROTECTED_ROUTES.includes(event.url.pathname)) {
+	if (
+		(!event.locals.user && PROTECTED_ROUTES.includes(event.url.pathname)) ||
+		PROTECTED_ROUTE_PATTERNS.some((pattern) => pattern.test(event.url.pathname))
+	) {
 		redirect(303, '/auth/login')
 	}
 
-	if (event.locals.user && ['/auth', '/auth/login'].includes(event.url.pathname)) {
+	if (event.locals.user && PUBLIC_ROUTES.includes(event.url.pathname)) {
 		redirect(303, '/')
 	}
 
