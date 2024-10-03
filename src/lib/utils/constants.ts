@@ -21,4 +21,4 @@ export const PROTECTED_ROUTES = ['/', '/history', '/history/trash']
 export const PROTECTED_ROUTE_PATTERNS = [
 	/^\/history\/\d+$/ // Matches paths like /history/34, /history/123, etc.
 ]
-export const PUBLIC_ROUTES = ['/auth', '/auth/login']
+export const PUBLIC_ROUTES = ['/auth', '/auth/login', '/auth/signup']
