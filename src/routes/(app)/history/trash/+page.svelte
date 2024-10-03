@@ -73,8 +73,9 @@
 				{/if}
 
 				<button
+					disabled={!data.histories.length}
 					on:click={handleEmptyTrash}
-					class="py-1 text-red-500 flex items-center justify-center gap-1 w-full text-center border rounded"
+					class="py-1 text-red-500 flex items-center justify-center gap-1 w-full text-center border rounded disabled:text-opacity-70 disabled:cursor-not-allowed"
 				>
 					<Icon icon="ph:trash-light" width="16px" />
 					Empty Trash</button
