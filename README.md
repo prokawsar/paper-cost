@@ -5,14 +5,17 @@
 ```bash
 -> Svelte
 -> SvelteKit
+-> JavaScript
 -> TypeScript
 -> Tailwind
+-> Supabase
+-> Playwright
 ```
 
 Tools
 
 ```bash
-
+-> Mixpanel
 ```
 
 ## After Cloning this project
