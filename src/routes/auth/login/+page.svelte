@@ -1,14 +1,18 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import Button from '$lib/elements/Button.svelte'
+	import FullPageLoader from '$lib/elements/FullPageLoader.svelte'
 	import Input from '$lib/elements/Input.svelte'
 	import { redirect } from '@sveltejs/kit'
 
 	export let data
 	export let form
+
 	$: ({ supabase } = data)
 
 	let email = form?.email || ''
 	let password = ''
+	let loading = false
 
 	const handleOAuthLogin = async () => {
 		const { data, error } = await supabase.auth.signInWithOAuth({
@@ -17,11 +21,9 @@
 				redirectTo: `http://localhost:2000/auth/callback/`
 			}
 		})
-
 		if (error) {
 			return
 		}
-
 		return redirect(300, data.url)
 	}
 </script>
@@ -40,7 +42,18 @@
 		{form?.message ? form?.message : ''}
 	</p>
 
-	<form method="post" action="?/login" class="flex w-full flex-col gap-3 items-center">
+	<form
+		method="post"
+		action="?/login"
+		class="flex w-full flex-col gap-3 items-center"
+		use:enhance={() => {
+			loading = true
+			return async ({ update }) => {
+				await update()
+				loading = false
+			}
+		}}
+	>
 		<Input
 			required
 			type="email"
@@ -66,3 +79,7 @@
 		Contact: <email>prokawsar@gmail.com</email>
 	</p>
 </section>
+
+{#if loading}
+	<FullPageLoader />
+{/if}

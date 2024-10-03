@@ -37,6 +37,7 @@
 					<Icon icon="ic:round-settings-backup-restore" />
 				</button>
 				<button
+					data-testid="delete-cost-history"
 					class:hidden={deleteConfirm == cost.id}
 					class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 					on:click|stopPropagation|preventDefault={() => (deleteConfirm = cost.id || '')}
@@ -55,6 +56,7 @@
 						<Icon icon="majesticons:multiply" width="16px" />
 					</button>
 					<button
+						data-testid="confirm-delete"
 						class="border border-green-300 p-[3px] rounded text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
 						on:click|stopPropagation|preventDefault={() => dispatch('delete', cost.id)}
 					>

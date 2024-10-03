@@ -1,5 +1,19 @@
 # Determine Paper Cost
 
+This project is specifically designed with a **MOBILE**-first approach, with the user interface optimized for mobile screens to provide an enhanced and professional user experience on mobile devices.
+
+## Features and Functionalities
+
+```bash
+-> Email/Password based authentication system
+-> Dynamic paper layer adding (Maximum 10 paper)
+-> Auto focus next field on press 'Enter'
+-> Calculate the price on press 'Enter' from last input field
+-> Price history saved in Supabase
+-> History trash for later recovery
+
+```
+
 ## Tech Stack
 
 ```bash
@@ -16,6 +30,20 @@ Tools
 
 ```bash
 -> Mixpanel
+```
+
+## Test Credentials
+
+Can be tested in live app
+
+```js
+// Email
+test@gmail.com
+```
+
+```js
+// Password
+111111
 ```
 
 ## After Cloning this project
