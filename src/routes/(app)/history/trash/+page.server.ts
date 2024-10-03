@@ -1,7 +1,11 @@
-import { supabase } from '$lib/db/supabaseClient'
+export async function load({ locals: { user, supabase } }) {
+	if (!user) throw new Error('Unautherized request')
 
-export async function load() {
-	const { data } = await supabase.from('history').select().not('deleted_at', 'is', null)
+	const { data } = await supabase
+		.from('history')
+		.select()
+		.eq('user', user.id)
+		.not('deleted_at', 'is', null)
 	return {
 		histories: data ?? []
 	}

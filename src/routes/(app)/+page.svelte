@@ -10,6 +10,8 @@
 	import { onMount, tick } from 'svelte'
 	import { toast } from 'svelte-sonner'
 
+	export let data
+
 	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
 	let perPaperResult: Map<string, number> = new Map()
 	let finalPrice: number = 0
@@ -64,7 +66,8 @@
 			const response = await addHistory({
 				name: customer_name,
 				final_price: finalPrice,
-				papers: paperCount
+				papers: paperCount,
+				user: data.user.id
 			})
 
 			if (response && response?.message.indexOf('TypeError') != -1) {

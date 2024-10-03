@@ -13,6 +13,8 @@
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import About from '$lib/elements/About.svelte'
 
+	export let data
+
 	//Import Mixpanel SDK
 	mixpanel.init(PUBLIC_MIX_TOKEN, {
 		debug: false,
@@ -26,10 +28,6 @@
 	let showAbout = false
 
 	const hideSettings = () => (showSettings = false)
-
-	const refresh = async () => {
-		window.location.reload()
-	}
 </script>
 
 <main class="h-[100svh] flex flex-col justify-between">
@@ -42,7 +40,7 @@
 	{/if}
 	{#if showAbout}
 		<Modal bind:show={showAbout}>
-			<About />
+			<About user={data.user} />
 		</Modal>
 	{/if}
 	<div class="flex flex-col h-[92%]">
@@ -66,7 +64,7 @@
 
 	<!-- Footer menu section -->
 	<div
-		class="max-w-6xl mx-auto w-full flex flex-row h-11 px-5 bg-slate-50 border-t border-teal-500 items-center justify-between rounded-t-lg"
+		class="relative max-w-6xl mx-auto w-full flex flex-row h-11 px-5 bg-slate-50 border-t border-teal-500 items-center justify-between rounded-t-lg"
 	>
 		<a
 			href="/"
@@ -89,24 +87,26 @@
 		>
 			<Icon icon="solar:settings-linear" /> Settings
 		</button>
+		{#if showSettings}
+			<div
+				transition:slide={{ axis: 'y', duration: 200 }}
+				class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
+			>
+				<button
+					on:click={() => {
+						hideSettings()
+						showAbout = true
+					}}>About</button
+				>
+				<form method="post" action="/?/logout">
+					<button
+						type="submit"
+						on:click={() => {
+							hideSettings()
+						}}>Logout</button
+					>
+				</form>
+			</div>
+		{/if}
 	</div>
-	{#if showSettings}
-		<div
-			transition:slide={{ axis: 'y', duration: 200 }}
-			class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
-		>
-			<button
-				on:click={() => {
-					hideSettings()
-					showAbout = true
-				}}>About</button
-			>
-			<button
-				on:click={() => {
-					hideSettings()
-					refresh()
-				}}>Refresh</button
-			>
-		</div>
-	{/if}
 </main>

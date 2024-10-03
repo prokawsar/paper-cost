@@ -15,12 +15,12 @@
 <div class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm">
 	{#if cost}
 		<a href="/history/{cost.id}" class="flex flex-row items-center pl-1 justify-between w-full">
-			<p class:hidden={!cost.name} class="truncate w-[40%]">
+			<p class:hidden={!cost.name} class="truncate w-[40%]" data-testid="product-name">
 				{cost.name}
 			</p>
 			<p class="text-gray-500 text-sm truncate">
 				{cost.final_price.toFixed(2)}
-				<span class=" text-teal-600">
+				<span class=" text-teal-600" data-testid="cost-with-40">
 					({(cost.final_price + get40Percent(cost.final_price)).toFixed(2)})
 				</span>
 			</p>

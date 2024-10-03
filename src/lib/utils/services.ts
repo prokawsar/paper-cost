@@ -15,6 +15,7 @@ export type CostHistoryType = {
 	name: string
 	papers: Paper[]
 	final_price: number
+	user: string
 	created_at?: string
 }
 
@@ -37,8 +38,9 @@ export const get40Percent = (cost: number) => {
 export const addHistory = async (history: CostHistoryType) => {
 	const { data, error } = await supabase.from('history').insert({
 		name: history.name || '',
-		papers: history.papers || [],
-		final_price: history.final_price || 100
+		papers: history.papers,
+		final_price: history.final_price,
+		user: history.user
 	})
 	if (!error) {
 		return data
@@ -47,7 +49,10 @@ export const addHistory = async (history: CostHistoryType) => {
 }
 
 export const getTotalHistory = async (): Promise<number> => {
-	const { count } = await await supabase.from('history').select('*', { count: 'exact' })
+	const { count } = await await supabase
+		.from('history')
+		.select('*', { count: 'exact' })
+		.is('deleted_at', null)
 	if (count) {
 		return count
 	}
