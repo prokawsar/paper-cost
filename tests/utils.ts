@@ -7,4 +7,5 @@ export const login = async (page: Page) => {
 	await page.getByTestId('password').click()
 	await page.getByTestId('password').fill('11111111')
 	await page.getByRole('button', { name: 'Login' }).click()
+	await page.waitForURL('/')
 }
