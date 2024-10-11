@@ -10,14 +10,19 @@
 	import About from '$lib/elements/About.svelte'
 	import FullPageLoader from '$lib/elements/FullPageLoader.svelte'
 	import Footer from '$lib/elements/Footer.svelte'
-
+	import { onMount } from 'svelte'
 	export let data
 
 	let showSettings = false
 	let showAbout = false
 	let loading = false
 
-	mixpanel.identify(data.user?.id)
+	onMount(() => {
+		mixpanel.identify(data.user?.id)
+		mixpanel.people.set({
+			email: data.user?.email
+		})
+	})
 </script>
 
 <main class="h-[100svh] flex flex-col justify-between">

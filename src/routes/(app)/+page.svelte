@@ -122,7 +122,7 @@
 			.findIndex((id) => focusedInputID == id)
 	}
 
-	function handleKeyDown(event: KeyboardEvent) {
+	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Enter' && inputs) {
 			event.preventDefault()
 			focusedIndex++
