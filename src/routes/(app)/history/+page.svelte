@@ -50,6 +50,7 @@
 				{/if}
 
 				<a
+					data-sveltekit-preload-data="tap"
 					href="/history/trash"
 					class="py-1 flex items-center justify-center gap-1 w-full text-center border rounded text-gray-600"
 				>
