@@ -5,7 +5,7 @@
 	import { softDeleteHistory } from '$lib/utils/services.js'
 	import { sortedByCreatedAt } from '$lib/utils/tools.js'
 	import Icon from '@iconify/svelte'
-	import mixpanel from 'mixpanel-browser'
+	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
 
 	export let data
@@ -50,6 +50,7 @@
 				{/if}
 
 				<a
+					data-sveltekit-preload-data="tap"
 					href="/history/trash"
 					class="py-1 flex items-center justify-center gap-1 w-full text-center border rounded text-gray-600"
 				>

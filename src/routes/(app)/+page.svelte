@@ -6,7 +6,7 @@
 	import { MAX_HISTORY, MAX_PAPER, paperFields } from '$lib/utils/constants'
 	import { addHistory, calculateCost, getTotalHistory, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
-	import mixpanel from 'mixpanel-browser'
+	import mixpanel from '$lib/utils/mixpanel'
 	import { onMount, tick } from 'svelte'
 	import { toast } from 'svelte-sonner'
 
@@ -18,7 +18,7 @@
 	let inputs: NodeListOf<HTMLInputElement> | null
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = 0
-	let customer_name = ''
+	let product_name = ''
 	let isSavingHistory = false
 
 	const addPaper = async () => {
@@ -61,10 +61,14 @@
 	}
 
 	const saveHistory = async () => {
+		if (!product_name) {
+			toast.warning('Product name is required!')
+			return
+		}
 		if ($totalHistoryStore < MAX_HISTORY) {
 			isSavingHistory = true
 			const response = await addHistory({
-				name: customer_name,
+				name: product_name,
 				final_price: finalPrice,
 				papers: paperCount,
 				user: data.user.id
@@ -85,7 +89,7 @@
 		paperCount = [{ ...paperFields, id: makeid(5) }]
 		finalPrice = 0
 		focusedIndex = 0
-		customer_name = ''
+		product_name = ''
 		perPaperResult.clear()
 		getAllInputs()
 		setFocus()
@@ -118,7 +122,7 @@
 			.findIndex((id) => focusedInputID == id)
 	}
 
-	function handleKeyDown(event: KeyboardEvent) {
+	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Enter' && inputs) {
 			event.preventDefault()
 			focusedIndex++
@@ -158,7 +162,7 @@
 		<div class="flex w-full gap-1 items-start">
 			<input
 				data-testid="product_name"
-				bind:value={customer_name}
+				bind:value={product_name}
 				type="text"
 				placeholder="Product name"
 				class="border-b py-[2px] border-dashed w-full h-full px-2 focus:outline-none focus:border-teal-500"

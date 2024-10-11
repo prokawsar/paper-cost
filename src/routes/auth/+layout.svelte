@@ -1,17 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { PUBLIC_MIX_TOKEN } from '$env/static/public'
 	import '$lib/app.css'
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import '@fontsource/jost'
-
-	//Import Mixpanel SDK
-	import mixpanel from 'mixpanel-browser'
-	mixpanel.init(PUBLIC_MIX_TOKEN, {
-		debug: false,
-		track_pageview: true,
-		persistence: 'localStorage'
-	})
 </script>
 
 <main class="h-[100svh] flex flex-col">
