@@ -5,7 +5,7 @@
 	import { deleteHistory, emptyTrashData, restoreHistory } from '$lib/utils/services.js'
 	import { sortedByCreatedAt } from '$lib/utils/tools.js'
 	import Icon from '@iconify/svelte'
-	import mixpanel from 'mixpanel-browser'
+	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
 
 	export let data
