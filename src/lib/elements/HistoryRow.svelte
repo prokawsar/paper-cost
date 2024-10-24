@@ -4,12 +4,17 @@
 	import dayjs from 'dayjs'
 	import { createEventDispatcher } from 'svelte'
 
-	export let cost: CostHistoryType
-	export let isTrash: boolean = false
+	let {
+		cost,
+		isTrash = false
+	}: {
+		cost: CostHistoryType
+		isTrash: boolean
+	} = $props()
 
 	const dispatch = createEventDispatcher()
 
-	let deleteConfirm = ''
+	let deleteConfirm = $state('')
 </script>
 
 <div class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm">
