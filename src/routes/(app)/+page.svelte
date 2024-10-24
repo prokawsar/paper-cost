@@ -25,14 +25,12 @@
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
-		paperCount = paperCount
 		getAllInputs()
 	}
 
 	const removePaper = async (idx: string) => {
 		paperCount = paperCount.filter((field) => field.id != idx)
 		if (perPaperResult.has(idx)) perPaperResult.delete(idx)
-		perPaperResult = perPaperResult
 		setTimeout(() => {
 			getAllInputs()
 		}, 300)

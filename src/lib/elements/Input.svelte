@@ -9,7 +9,7 @@
 		type?: string
 		disabled?: boolean
 		classNames?: string
-		onkeydown?: () => void
+		onkeydown?: (event: KeyboardEvent) => void
 		onfocus?: () => void
 	}
 
@@ -44,7 +44,7 @@
 	bind:value
 	{onkeydown}
 	onfocus={() => {
-		;($focusedInputStore = inputRef), onfocus()
+		$focusedInputStore = inputRef
 	}}
 	{...rest}
 />

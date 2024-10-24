@@ -17,7 +17,7 @@
 		index: number
 		totalPaper: number
 		perPaperResult: Map<string, number>
-		onkeydown: (event) => void
+		onkeydown: (event: KeyboardEvent) => void
 		onremove: () => void
 	} = $props()
 
