@@ -7,19 +7,20 @@
 	import { addHistory, calculateCost, getTotalHistory, type Paper } from '$lib/utils/services'
 	import { makeid } from '$lib/utils/tools'
 	import mixpanel from '$lib/utils/mixpanel'
-	import { onMount, tick } from 'svelte'
 	import { toast } from 'svelte-sonner'
+	import { SvelteMap } from 'svelte/reactivity'
+	import { tick } from 'svelte'
 
-	export let data
+	let { data } = $props()
 
-	let paperCount: Paper[] = [{ ...paperFields, id: makeid(5) }]
-	let perPaperResult: Map<string, number> = new Map()
-	let finalPrice: number = 0
-	let inputs: NodeListOf<HTMLInputElement> | null
+	let paperCount: Paper[] = $state([{ ...paperFields, id: makeid(5) }])
+	let perPaperResult: Map<string, number> = new SvelteMap()
+	let finalPrice: number = $state(0)
+	let inputs: NodeListOf<HTMLInputElement> | null = $state(null)
 	let inputGroupRef: HTMLDivElement
-	let focusedIndex = 0
-	let product_name = ''
-	let isSavingHistory = false
+	let focusedIndex = $state(0)
+	let product_name = $state('')
+	let isSavingHistory = $state(false)
 
 	const addPaper = async () => {
 		paperCount.push({ ...paperFields, id: makeid(5) })
@@ -103,24 +104,26 @@
 	const setFocus = (element?: HTMLInputElement) => {
 		if (inputs) {
 			$focusedInputStore = element || inputs[0]
-			$focusedInputStore.focus()
+			// $focusedInputStore.focus()
 		}
 	}
 
-	$: hasNullValue =
+	const hasNullValue = $derived(
 		paperCount &&
-		paperCount.find((paper) => {
-			return !paper.length || !paper.width || !paper.thickness || !paper.rate
-		})
-	$: showSaveHistory = perPaperResult.size == paperCount.length
+			paperCount.find((paper) => {
+				return !paper.length || !paper.width || !paper.thickness || !paper.rate
+			})
+	)
+
+	const showSaveHistory = $derived(perPaperResult.size == paperCount.length)
 	// Handling and maintaining focused input index
-	$: inputsArray = inputs && Array.from(inputs)
-	$: focusedInputID = $focusedInputStore && $focusedInputStore.getAttribute('id')
-	$: if (focusedInputID && inputsArray && inputsArray.length) {
-		focusedIndex = inputsArray
-			.map((input) => input.getAttribute('id'))
-			.findIndex((id) => focusedInputID == id)
-	}
+	// const inputsArray = $derived(Array.from(inputs))
+	// const focusedInputID = $derived($focusedInputStore && $focusedInputStore.getAttribute('id'))
+	// $: if (focusedInputID && inputsArray && inputsArray.length) {
+	// 	focusedIndex = inputsArray
+	// 		.map((input) => input.getAttribute('id'))
+	// 		.findIndex((id) => focusedInputID == id)
+	// }
 
 	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Enter' && inputs) {
@@ -139,10 +142,10 @@
 		}
 	}
 
-	onMount(async () => {
-		await getAllInputs()
-		setFocus()
-		$totalHistoryStore = await getTotalHistory()
+	$effect(() => {
+		// getAllInputs()
+		// setFocus()
+		// $totalHistoryStore =  getTotalHistory()
 	})
 </script>
 
@@ -152,7 +155,9 @@
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-3 px-4 py-3">
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<div
+		class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]"
+	></div>
 	<div class="flex flex-col w-full justify-between gap-2 h-[90%] items-center">
 		{#if $totalHistoryStore >= MAX_HISTORY}
 			<p class="text-sm text-yellow-600 animate-pulse">
@@ -170,7 +175,7 @@
 			{#if showSaveHistory}
 				<Button
 					disabled={isSavingHistory}
-					on:click={saveHistory}
+					onclick={saveHistory}
 					text="Save cost"
 					classNames="text-sm animate-pulse !w-[30%] !px-1"
 				/>
@@ -183,11 +188,11 @@
 			{#each paperCount as paper, index (paper.id)}
 				<PaperItem
 					{index}
-					bind:paper
+					bind:paper={paperCount[index]}
 					{perPaperResult}
 					totalPaper={paperCount.length}
-					on:keydown={(event) => handleKeyDown(event)}
-					on:remove={() => removePaper(paper.id)}
+					onkeydown={(event) => handleKeyDown(event)}
+					onremove={() => removePaper(paper.id)}
 				/>
 			{/each}
 		</div>
@@ -198,20 +203,20 @@
 			<div class="flex flex-row justify-between w-full mt-3">
 				<Button
 					classNames="text-sm"
-					on:click={addPaper}
+					onclick={addPaper}
 					disabled={paperCount.length == MAX_PAPER}
 					text="Add paper"
 				/>
 				{#if finalPrice}
 					<button
 						class="border border-red-200 rounded-md px-3 py-1 text-red-400 w-fit"
-						on:click={clearAll}
+						onclick={clearAll}
 					>
 						Clear
 					</button>
 				{/if}
 				{#if paperCount.length}
-					<Button on:click={calculatePaperCost} disabled={!!hasNullValue} text="Calculate" />
+					<Button onclick={calculatePaperCost} disabled={!!hasNullValue} text="Calculate" />
 				{/if}
 			</div>
 			<!-- result section -->
