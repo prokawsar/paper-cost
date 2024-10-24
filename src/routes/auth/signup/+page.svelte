@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Button from '$lib/elements/Button.svelte'
 	import Input from '$lib/elements/Input.svelte'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 
-	export let form
+	let { form } = $props()
 
-	let email = form?.email || ''
-	let password = ''
+	let email = $derived(form?.email || '')
 </script>
 
 <svelte:head>
@@ -14,7 +14,7 @@
 
 <section class="max-w-6xl mx-auto flex items-center w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-xl text-center">Signup</h1>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<SingleLine />
 	<p
 		class:hidden={!form?.message}
 		class="text-sm text-red-500 border border-red-200 rounded-sm px-1"
@@ -27,7 +27,7 @@
 			required
 			type="email"
 			name="email"
-			bind:value={email}
+			value={email}
 			classNames="!w-full text-center"
 			placeholder="Type your email"
 		/>
@@ -35,7 +35,6 @@
 			required
 			type="password"
 			name="password"
-			bind:value={password}
 			classNames="!w-full text-center font-bold"
 			placeholder="*******"
 		/>

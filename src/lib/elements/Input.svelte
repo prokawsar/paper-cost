@@ -3,14 +3,14 @@
 	import { makeid } from '$lib/utils/tools'
 
 	type InputType = {
-		id: string
+		id?: string
 		value: string
 		name: string
-		type: string
-		disabled: boolean
-		classNames: string
-		onkeydown: () => void
-		onfocus: () => void
+		type?: string
+		disabled?: boolean
+		classNames?: string
+		onkeydown?: () => void
+		onfocus?: () => void
 	}
 
 	let {

@@ -3,11 +3,11 @@
 	import Result from '$lib/elements/Result.svelte'
 	import dayjs from 'dayjs'
 	import { calculateCost, type CostHistoryType } from '$lib/utils/services'
-	import Icon from '@iconify/svelte'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 
-	export let data
+	const { data } = $props()
 
-	let history: CostHistoryType | null = data.history
+	let history: CostHistoryType | null = $state(data.history)
 </script>
 
 <svelte:head>
@@ -16,7 +16,8 @@
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[90%] flex-col gap-3 px-4 pt-3">
 	<h1 class="text-xl text-center">Cost Details</h1>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<SingleLine />
+
 	{#if history}
 		<div class="flex flex-row justify-between px-1 gap-2 items-center">
 			<div class="flex flex-row gap-1 justify-between flex-grow">
@@ -33,15 +34,15 @@
 		<div class="flex flex-col w-full justify-between gap-3 h-[85%] items-center">
 			<div class="flex flex-col overflow-y-auto w-full max-w-3xl py-2">
 				{#if history.papers.length}
-					{#each history.papers as { length, width, thickness, rate, id }}
+					{#each history.papers as { length, width, thickness, rate, id }, i}
 						<div class="w-full">
 							<div
 								class="flex flex-row w-full gap-1 items-center justify-between overflow-y-auto p-[2px]"
 							>
-								<Input bind:value={length} disabled />
-								<Input bind:value={width} disabled />
-								<Input bind:value={thickness} disabled />
-								<Input bind:value={rate} disabled />
+								<Input name="length" bind:value={history.papers[i].length} disabled />
+								<Input name="width" bind:value={history.papers[i].width} disabled />
+								<Input name="thickness" bind:value={history.papers[i].thickness} disabled />
+								<Input name="rate" bind:value={history.papers[i].rate} disabled />
 								<div class="flex justify-center">
 									<p class="font-semibold">
 										= {calculateCost({ length, width, thickness, rate, id }).toFixed(2)}

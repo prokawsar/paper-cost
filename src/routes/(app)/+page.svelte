@@ -10,6 +10,7 @@
 	import { toast } from 'svelte-sonner'
 	import { SvelteMap } from 'svelte/reactivity'
 	import { tick } from 'svelte'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 
 	let { data } = $props()
 
@@ -155,9 +156,8 @@
 
 <section class="max-w-6xl mx-auto flex w-full max-h-[85%] flex-col gap-3 px-4 py-3">
 	<h1 class="text-xl text-center text-teal-500 font-semibold">Paper Cost</h1>
-	<div
-		class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]"
-	></div>
+	<SingleLine />
+
 	<div class="flex flex-col w-full justify-between gap-2 h-[90%] items-center">
 		{#if $totalHistoryStore >= MAX_HISTORY}
 			<p class="text-sm text-yellow-600 animate-pulse">

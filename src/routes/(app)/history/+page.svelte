@@ -7,6 +7,7 @@
 	import Icon from '@iconify/svelte'
 	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 
 	let { data } = $props()
 
@@ -36,9 +37,7 @@
 			{data.histories.length}
 		</p>
 	</div>
-	<div
-		class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]"
-	></div>
+	<SingleLine />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="relative flex flex-col justify-between h-full gap-3 w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
