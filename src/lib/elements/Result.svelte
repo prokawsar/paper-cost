@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { get40Percent } from '$lib/utils/services'
 
-	export let total: number = 0
+	let { total = 0 }: { total: number } = $props()
 
-	$: _40Percent = get40Percent(total)
+	const _40Percent = $derived(get40Percent(total))
 </script>
 
 <div class="flex flex-col gap-1 w-full border shadow-md rounded py-1 px-2">

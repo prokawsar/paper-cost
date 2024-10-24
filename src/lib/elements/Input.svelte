@@ -1,18 +1,33 @@
 <script lang="ts">
 	import { focusedInputStore } from '$lib/stores'
 	import { makeid } from '$lib/utils/tools'
-	import { onMount } from 'svelte'
 
-	export let id: string = makeid(3)
-	export let value: string
-	export let name: string = ''
-	export let type: string = 'number'
-	export let disabled: boolean = false
-	export let classNames: string = ''
+	type InputType = {
+		id?: string
+		value: string
+		name: string
+		type?: string
+		disabled?: boolean
+		classNames?: string
+		onkeydown?: (event: KeyboardEvent) => void
+		onfocus?: () => void
+	}
+
+	let {
+		id = makeid(3),
+		value = $bindable(),
+		name,
+		classNames,
+		disabled = false,
+		type = 'number',
+		onkeydown,
+		onfocus,
+		...rest
+	}: InputType = $props()
 
 	let inputRef: HTMLInputElement
 
-	onMount(() => {
+	$effect(() => {
 		if (inputRef) {
 			inputRef.type = type
 		}
@@ -27,10 +42,11 @@
 	{disabled}
 	class="input-field focus:!border-[1.5px] focus:!border-teal-500 focus:outline-none {classNames}"
 	bind:value
-	on:keydown
-	on:focus
-	on:focus={() => ($focusedInputStore = inputRef)}
-	{...$$restProps}
+	{onkeydown}
+	onfocus={() => {
+		$focusedInputStore = inputRef
+	}}
+	{...rest}
 />
 
 <style lang="postcss">

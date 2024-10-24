@@ -3,16 +3,15 @@
 	import Button from '$lib/elements/Button.svelte'
 	import FullPageLoader from '$lib/elements/FullPageLoader.svelte'
 	import Input from '$lib/elements/Input.svelte'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 	import { redirect } from '@sveltejs/kit'
 
-	export let data
-	export let form
+	let { data, form } = $props()
 
-	$: ({ supabase } = data)
+	const { supabase } = $derived(data)
 
-	let email = form?.email || ''
-	let password = ''
-	let loading = false
+	let email = $derived(form?.email || '')
+	let loading = $state(false)
 
 	const handleOAuthLogin = async () => {
 		const { data, error } = await supabase.auth.signInWithOAuth({
@@ -34,7 +33,7 @@
 
 <section class="max-w-6xl mx-auto flex items-center w-full max-h-[90%] flex-col gap-4 px-4 py-5">
 	<h1 class="text-xl text-center">Login</h1>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<SingleLine />
 	<p
 		class:hidden={!form?.message}
 		class="text-sm text-red-500 border border-red-200 rounded-sm px-1"
@@ -58,7 +57,7 @@
 			required
 			type="email"
 			name="email"
-			bind:value={email}
+			value={email}
 			classNames="!w-full text-center"
 			placeholder="Type your email"
 		/>
@@ -66,7 +65,6 @@
 			required
 			type="password"
 			name="password"
-			bind:value={password}
 			classNames="!w-full text-center font-bold"
 			placeholder="*******"
 		/>

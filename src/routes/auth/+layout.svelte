@@ -2,6 +2,8 @@
 	import '$lib/app.css'
 	import BrandTitle from '$lib/elements/BrandTitle.svelte'
 	import '@fontsource/jost'
+
+	let { children } = $props()
 </script>
 
 <main class="h-[100svh] flex flex-col">
@@ -11,9 +13,9 @@
 		</div>
 		<div
 			class="w-full max-w-6xl mx-auto bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]"
-		/>
+		></div>
 	</nav>
-	<slot />
+	{@render children()}
 
 	<div class="absolute bottom-0 w-full">
 		<p class="text-center text-gray-400">

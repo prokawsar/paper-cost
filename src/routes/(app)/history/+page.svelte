@@ -7,9 +7,11 @@
 	import Icon from '@iconify/svelte'
 	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
+	import SingleLine from '$lib/elements/SingleLine.svelte'
 
-	export let data
-	let isLoading = false
+	let { data } = $props()
+
+	let isLoading = $state(false)
 
 	mixpanel.track_pageview({
 		url: '/history'
@@ -35,14 +37,14 @@
 			{data.histories.length}
 		</p>
 	</div>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<SingleLine />
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div class="relative flex flex-col justify-between h-full gap-3 w-full max-w-3xl py-2 z-0">
 			{#if !isLoading}
 				{#if data.histories.length}
 					<div class="flex flex-col gap-2 overflow-y-auto">
 						{#each sortedByCreatedAt(data.histories) as cost}
-							<HistoryRow {cost} on:delete={(e) => handleDelete(e.detail)} />
+							<HistoryRow {cost} ondelete={(id) => handleDelete(id)} />
 						{/each}
 					</div>
 				{:else}
