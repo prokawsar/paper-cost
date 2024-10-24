@@ -5,9 +5,13 @@
 	import { enhance } from '$app/forms'
 	import mixpanel from '$lib/utils/mixpanel'
 
-	export let showSettings = false
-	export let showAbout = false
-	export let loading = false
+	type FooterProp = { showSettings: boolean; showAbout: boolean; loading: boolean }
+
+	let {
+		showSettings = $bindable(),
+		showAbout = $bindable(),
+		loading = $bindable()
+	}: FooterProp = $props()
 
 	const navItems = [
 		{ href: '/', label: 'Home', icon: 'clarity:home-line' },
@@ -34,7 +38,7 @@
 				{label}
 			</a>
 		{/each}
-		<button on:click={toggleSettings} class="flex flex-row gap-1 items-center">
+		<button onclick={toggleSettings} class="flex flex-row gap-1 items-center">
 			<Icon icon="solar:settings-linear" /> Settings
 		</button>
 	</nav>
@@ -45,7 +49,7 @@
 			class="absolute w-20 right-3 bottom-11 flex flex-col items-start divide-y divide-orange-400 gap-1 bg-slate-50 p-2 rounded"
 		>
 			<button
-				on:click={() => {
+				onclick={() => {
 					showAbout = true
 					toggleSettings()
 				}}>About</button

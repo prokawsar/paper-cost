@@ -39,7 +39,7 @@
 			<div class="flex justify-center py-2">
 				<BrandTitle />
 			</div>
-			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]" />
+			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]"></div>
 		</nav>
 		<slot />
 	</div>
