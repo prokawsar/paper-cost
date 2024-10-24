@@ -8,8 +8,9 @@
 	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
 
-	export let data
-	let isLoading = false
+	let { data } = $props()
+
+	let isLoading = $state(false)
 
 	mixpanel.track_pageview({
 		url: '/history/trash'
@@ -51,7 +52,9 @@
 			{data.histories.length}
 		</p>
 	</div>
-	<div class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]" />
+	<div
+		class="w-full bg-gradient-to-r from-transparent via-slate-600/10 to-transparent p-[1px]"
+	></div>
 	<div class="flex flex-col w-full justify-between gap-4 h-[90%] items-center">
 		<div
 			class="relative flex flex-col h-full gap-2 justify-between overflow-y-auto w-full max-w-3xl py-2 z-0"
@@ -63,8 +66,8 @@
 							<HistoryRow
 								isTrash
 								{cost}
-								on:restore={(e) => handleRestore(e.detail)}
-								on:delete={(e) => handleDelete(e.detail)}
+								onrestore={(id) => handleRestore(id)}
+								ondelete={(id) => handleDelete(id)}
 							/>
 						{/each}
 					</div>
@@ -74,7 +77,7 @@
 
 				<button
 					disabled={!data.histories.length}
-					on:click={handleEmptyTrash}
+					onclick={handleEmptyTrash}
 					class="py-1 text-red-500 flex items-center justify-center gap-1 w-full text-center border rounded disabled:text-opacity-70 disabled:cursor-not-allowed"
 				>
 					<Icon icon="ph:trash-light" width="16px" />

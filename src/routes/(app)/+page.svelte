@@ -14,7 +14,7 @@
 	let { data } = $props()
 
 	let paperCount: Paper[] = $state([{ ...paperFields, id: makeid(5) }])
-	let perPaperResult: Map<string, number> = new SvelteMap()
+	let perPaperResult: SvelteMap<string, number> = new SvelteMap()
 	let finalPrice: number = $state(0)
 	let inputs: NodeListOf<HTMLInputElement> | null = $state(null)
 	let inputGroupRef: HTMLDivElement
@@ -145,7 +145,7 @@
 	$effect(() => {
 		// getAllInputs()
 		// setFocus()
-		// $totalHistoryStore =  getTotalHistory()
+		getTotalHistory().then((totalHistory) => ($totalHistoryStore = totalHistory))
 	})
 </script>
 
