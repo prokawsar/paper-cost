@@ -2,7 +2,6 @@
 	import '$lib/app.css'
 	import '@fontsource/jost'
 	import { navigating } from '$app/stores'
-	import Loader from '$lib/elements/Loader.svelte'
 	import mixpanel from '$lib/utils/mixpanel'
 	import { Toaster } from 'svelte-sonner'
 	import Modal from '$lib/elements/Modal.svelte'

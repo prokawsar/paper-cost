@@ -9,7 +9,7 @@
 	import mixpanel from '$lib/utils/mixpanel'
 	import { toast } from 'svelte-sonner'
 	import { SvelteMap } from 'svelte/reactivity'
-	import { tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 	import SingleLine from '$lib/elements/SingleLine.svelte'
 
 	let { data } = $props()
@@ -17,10 +17,11 @@
 	let paperCount: Paper[] = $state([{ ...paperFields, id: makeid(5) }])
 	let perPaperResult: SvelteMap<string, number> = new SvelteMap()
 	let finalPrice: number = $state(0)
-	let inputs: NodeListOf<HTMLInputElement> | null = $state(null)
+	let inputs: NodeListOf<HTMLInputElement> | [] = $state([])
 	let inputGroupRef: HTMLDivElement
 	let focusedIndex = $state(0)
 	let product_name = $state('')
+	let inputsArray: HTMLInputElement[] = $state([])
 	let isSavingHistory = $state(false)
 
 	const addPaper = async () => {
@@ -68,6 +69,7 @@
 		if ($totalHistoryStore < MAX_HISTORY) {
 			isSavingHistory = true
 			const response = await addHistory({
+				id: '',
 				name: product_name,
 				final_price: finalPrice,
 				papers: paperCount,
@@ -98,12 +100,13 @@
 	const getAllInputs = async () => {
 		await tick()
 		inputs = inputGroupRef.querySelectorAll('input')
+		inputsArray = Array.from(inputs)
 	}
 
 	const setFocus = (element?: HTMLInputElement) => {
-		if (inputs) {
+		if (inputs.length) {
 			$focusedInputStore = element || inputs[0]
-			// $focusedInputStore.focus()
+			$focusedInputStore?.focus()
 		}
 	}
 
@@ -115,14 +118,16 @@
 	)
 
 	const showSaveHistory = $derived(perPaperResult.size == paperCount.length)
+
 	// Handling and maintaining focused input index
-	// const inputsArray = $derived(Array.from(inputs))
-	// const focusedInputID = $derived($focusedInputStore && $focusedInputStore.getAttribute('id'))
-	// $: if (focusedInputID && inputsArray && inputsArray.length) {
-	// 	focusedIndex = inputsArray
-	// 		.map((input) => input.getAttribute('id'))
-	// 		.findIndex((id) => focusedInputID == id)
-	// }
+	const focusedInputID = $derived($focusedInputStore && $focusedInputStore.getAttribute('id'))
+	$effect(() => {
+		if (focusedInputID && inputsArray && inputsArray.length) {
+			focusedIndex = inputsArray
+				.map((input) => input.getAttribute('id'))
+				.findIndex((id) => focusedInputID == id)
+		}
+	})
 
 	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Enter' && inputs) {
@@ -141,9 +146,9 @@
 		}
 	}
 
-	$effect(() => {
-		// getAllInputs()
-		// setFocus()
+	onMount(() => {
+		getAllInputs()
+		setFocus()
 		getTotalHistory().then((totalHistory) => ($totalHistoryStore = totalHistory))
 	})
 </script>

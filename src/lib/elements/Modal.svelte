@@ -2,7 +2,12 @@
 	import { makeid, receive, send } from '$lib/utils/tools'
 	import Icon from '@iconify/svelte'
 
-	export let show = false
+	interface Props {
+		show?: boolean
+		children?: import('svelte').Snippet
+	}
+
+	let { show = $bindable(false), children }: Props = $props()
 	const id = makeid(6)
 </script>
 
@@ -14,10 +19,14 @@
 	>
 		<button
 			class="absolute top-0 right-0 p-[3px] rounded-full w-fit"
-			on:click|stopPropagation|preventDefault={() => (show = false)}
+			onclick={(e) => {
+				e.preventDefault()
+				e.stopPropagation()
+				show = false
+			}}
 		>
 			<Icon icon="majesticons:multiply" width="20px" />
 		</button>
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
