@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { version } from '$app/environment'
 	import type { User } from '@supabase/supabase-js'
-	export let user: User | null = null
+
+	const { user }: { user: User | null } = $props()
 </script>
 
 <div class="flex flex-col text-center items-center">

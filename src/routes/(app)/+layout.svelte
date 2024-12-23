@@ -2,7 +2,6 @@
 	import '$lib/app.css'
 	import '@fontsource/jost'
 	import { navigating } from '$app/stores'
-	import Loader from '$lib/elements/Loader.svelte'
 	import mixpanel from '$lib/utils/mixpanel'
 	import { Toaster } from 'svelte-sonner'
 	import Modal from '$lib/elements/Modal.svelte'
@@ -10,14 +9,13 @@
 	import About from '$lib/elements/About.svelte'
 	import FullPageLoader from '$lib/elements/FullPageLoader.svelte'
 	import Footer from '$lib/elements/Footer.svelte'
-	import { onMount } from 'svelte'
-	export let data
 
-	let showSettings = false
-	let showAbout = false
-	let loading = false
+	let { data, children } = $props()
+	let showSettings = $state(false)
+	let showAbout = $state(false)
+	let loading = $state(false)
 
-	onMount(() => {
+	$effect(() => {
 		mixpanel.identify(data.user?.id)
 		mixpanel.people.set({
 			email: data.user?.email
@@ -39,9 +37,9 @@
 			<div class="flex justify-center py-2">
 				<BrandTitle />
 			</div>
-			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]" />
+			<div class="bg-gradient-to-r from-transparent via-orange-800/40 to-transparent p-[1px]"></div>
 		</nav>
-		<slot />
+		{@render children()}
 	</div>
 
 	<Toaster

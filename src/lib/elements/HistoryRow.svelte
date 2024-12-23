@@ -2,14 +2,20 @@
 	import { get40Percent, type CostHistoryType } from '$lib/utils/services'
 	import Icon from '@iconify/svelte'
 	import dayjs from 'dayjs'
-	import { createEventDispatcher } from 'svelte'
 
-	export let cost: CostHistoryType
-	export let isTrash: boolean = false
+	let {
+		cost,
+		isTrash = false,
+		ondelete,
+		onrestore
+	}: {
+		cost: CostHistoryType
+		isTrash?: boolean
+		ondelete: (id: string) => void
+		onrestore?: (id: string) => void
+	} = $props()
 
-	const dispatch = createEventDispatcher()
-
-	let deleteConfirm = ''
+	let deleteConfirm = $state('')
 </script>
 
 <div class="flex flex-col gap-1 items-center w-full p-1 border border-dashed rounded shadow-sm">
@@ -29,18 +35,27 @@
 			</p>
 
 			<div class="flex flex-row items-center gap-[2px]">
-				<button
-					class:hidden={deleteConfirm == cost.id || !isTrash}
-					class="border border-green-300 rounded text-green-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-					on:click|stopPropagation|preventDefault={() => dispatch('restore', cost.id)}
-				>
-					<Icon icon="ic:round-settings-backup-restore" />
-				</button>
+				{#if onrestore}
+					<button
+						class:hidden={deleteConfirm == cost.id || !isTrash}
+						class="border border-green-300 rounded text-green-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
+						onclick={(e) => {
+							e.preventDefault()
+							onrestore(cost.id)
+						}}
+					>
+						<Icon icon="ic:round-settings-backup-restore" />
+					</button>
+				{/if}
 				<button
 					data-testid="delete-cost-history"
 					class:hidden={deleteConfirm == cost.id}
 					class="border border-red-300 rounded text-red-600 p-[3px] w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-					on:click|stopPropagation|preventDefault={() => (deleteConfirm = cost.id || '')}
+					onclick={(e) => {
+						e.preventDefault()
+						e.stopPropagation()
+						deleteConfirm = cost.id || ''
+					}}
 				>
 					{#if isTrash}
 						<Icon icon="ic:baseline-delete-forever" />
@@ -51,14 +66,22 @@
 				{#if deleteConfirm == cost.id}
 					<button
 						class="border border-yellow-300 p-[3px] rounded text-yellow-600 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-						on:click|stopPropagation|preventDefault={() => (deleteConfirm = '')}
+						onclick={(e) => {
+							e.preventDefault()
+							e.stopPropagation()
+							deleteConfirm = ''
+						}}
 					>
 						<Icon icon="majesticons:multiply" width="16px" />
 					</button>
 					<button
 						data-testid="confirm-delete"
 						class="border border-green-300 p-[3px] rounded text-green-700 w-fit disabled:border-gray-200 disabled:cursor-not-allowed disabled:text-opacity-45"
-						on:click|stopPropagation|preventDefault={() => dispatch('delete', cost.id)}
+						onclick={(e) => {
+							e.preventDefault()
+							e.stopPropagation()
+							ondelete(cost.id)
+						}}
 					>
 						<Icon icon="teenyicons:tick-solid" width="15px" />
 					</button>
